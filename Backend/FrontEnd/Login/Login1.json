@@ -1,0 +1,14 @@
+{
+  "name": "lrvs-login-demo",
+  "version": "1.0.0",
+  "description": "LRVS (Land Record Verification System) login page - Express + EJS demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2"
+  }
+}
