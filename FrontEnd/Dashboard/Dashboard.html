@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LRVS · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2 2 7v2h20V7L12 2Z" fill="currentColor"/>
+          <path d="M4 10v9h2v-9H4Zm5 0v9h2v-9H9Zm5 0v9h2v-9h-2Zm5 0v9h2v-9h-2Z" fill="currentColor"/>
+          <path d="M2 21h20v2H2v-2Z" fill="currentColor"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">LRVS</span>
+        <span class="brand-sub">Land Record Verification</span>
+      </div>
+      <button class="brand-collapse" aria-label="Collapse sidebar">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M9 3v18M4 3h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+    </div>
+
+    <nav class="nav">
+      <a class="nav-item active" href="#" data-nav>
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M3 12h4l3 9 4-18 3 9h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span>Dashboard</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="org-card">
+        <div class="org-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M12 2 2 7v2h20V7L12 2Z" fill="currentColor"/><path d="M4 10v9h2v-9H4Zm5 0v9h2v-9H9Zm5 0v9h2v-9h-2Zm5 0v9h2v-9h-2Z" fill="currentColor"/><path d="M2 21h20v2H2v-2Z" fill="currentColor"/></svg>
+        </div>
+        <div class="org-text">
+          <span class="org-name">Govt. of Maharashtra</span>
+          <span class="org-sub">Revenue Dept. · Nashik</span>
+        </div>
+      </div>
+      <div class="user-card">
+        <div class="avatar">AD</div>
+        <div class="user-text">
+          <span class="user-name">A. Deshmukh</span>
+          <span class="user-role">Verification Officer</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <header class="topbar">
+      <div class="crumbs">
+        <span>Workspace</span>
+        <span class="sep">›</span>
+        <span class="crumb-current">Dashboard</span>
+      </div>
+      <div class="topbar-actions">
+        <div class="search">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input type="text" placeholder="Search request or registration">
+        </div>
+        <div class="session-pill">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none"><path d="M12 2 4 5v6c0 5 3.4 8.7 8 11 4.6-2.3 8-6 8-11V5l-8-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Secure session
+        </div>
+        <button class="icon-btn bell" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span class="dot"></span>
+        </button>
+        <div class="avatar small">AD</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Monitor land record verification activity and pending work.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Audit Trail
+          </button>
+          <button class="btn btn-primary">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Create Property Request
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary cards -->
+      <section class="stat-grid">
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Pending Requests</span>
+            <span class="stat-icon icon-amber">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+          <div class="stat-value">18</div>
+          <div class="stat-delta up">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none"><path d="M4 17 10 11 14 15 20 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 8h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            +4 today
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">In Review</span>
+            <span class="stat-icon icon-blue">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+            </span>
+          </div>
+          <div class="stat-value">7</div>
+          <div class="stat-delta up">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none"><path d="M4 17 10 11 14 15 20 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 8h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            +2 today
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Approved</span>
+            <span class="stat-icon icon-green">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="m8 12.5 2.5 2.5L16 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </div>
+          <div class="stat-value">142</div>
+          <div class="stat-delta up">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none"><path d="M4 17 10 11 14 15 20 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 8h6v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            +9 this week
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-top">
+            <span class="stat-label">Rejected</span>
+            <span class="stat-icon icon-red">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="m9 9 6 6m0-6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span>
+          </div>
+          <div class="stat-value">5</div>
+          <div class="stat-delta down">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none"><path d="M4 8 10 14 14 10 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 17h6v-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            -1 this week
+          </div>
+        </article>
+      </section>
+
+      <!-- Charts -->
+      <section class="panel-grid">
+        <article class="panel panel-activity">
+          <div class="panel-head">
+            <div>
+              <h2>Verification Activity</h2>
+              <p>Submitted, verified and approved records</p>
+            </div>
+            <div class="range-toggle" role="tablist">
+              <button class="range-btn active" data-range="7">7 days</button>
+              <button class="range-btn" data-range="30">30 days</button>
+              <button class="range-btn" data-range="90">90 days</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="activityChart" height="220"></canvas>
+          </div>
+        </article>
+
+        <article class="panel panel-distribution">
+          <div class="panel-head">
+            <div>
+              <h2>Request Distribution</h2>
+              <p>Current workload by status</p>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <canvas id="distributionChart" height="220"></canvas>
+          </div>
+          <ul class="legend-list">
+            <li><span class="dot dot-amber"></span>Pending<span class="legend-value">18</span></li>
+            <li><span class="dot dot-blue"></span>In Review<span class="legend-value">7</span></li>
+            <li><span class="dot dot-green"></span>Approved<span class="legend-value">142</span></li>
+            <li><span class="dot dot-red"></span>Rejected<span class="legend-value">5</span></li>
+          </ul>
+        </article>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
