@@ -1,0 +1,474 @@
+<!-- Data Checker — Check Data (Two-Window Concept) -->
+<div class="space-y-4">
+
+  <!-- Header & Meta Bar (Ref: PDF Page 19 & 21) -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+      <h1 class="text-xl font-bold tracking-tight text-[#1A2A42]">Check Data</h1>
+      <p class="text-xs text-slate-500 mt-0.5">Compare the original document with AI-filled information and verify for accuracy.</p>
+    </div>
+    <a href="/verification/queue" class="btn-outline px-3.5 py-1.5 text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      <span>Back to List</span>
+    </a>
+  </div>
+
+  <!-- Record Summary Strip -->
+  <div class="lrvs-card p-4 grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs">
+    <div>
+      <span class="text-slate-400 block text-[11px]">Request ID</span>
+      <span class="font-mono font-bold text-[#1A2A42] mt-0.5 block"><%= record.requestId %></span>
+    </div>
+    <div>
+      <span class="text-slate-400 block text-[11px]">Property Details</span>
+      <span class="font-semibold text-[#1A2A42] mt-0.5 block truncate">
+        Survey No. <%= record.surveyNumber || '78/3' %>, <%= record.village || 'Nashik' %>
+      </span>
+    </div>
+    <div>
+      <span class="text-slate-400 block text-[11px]">Document Type</span>
+      <span class="font-semibold text-[#1A2A42] mt-0.5 block">
+        <%= (documents && documents[0] && (documents[0].documentType || '').replace(/_/g, ' ')) || '7/12 Extract' %>
+      </span>
+    </div>
+    <div>
+      <span class="text-slate-400 block text-[11px]">Submitted On</span>
+      <span class="text-slate-600 mt-0.5 block">
+        <%= record.createdAt ? new Date(record.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '11 Aug 2024, 04:20 PM' %>
+      </span>
+    </div>
+    <div>
+      <span class="text-slate-400 block text-[11px]">Status</span>
+      <div class="mt-0.5">
+        <%- include('../partials/status-badge', { status: record.acquisitionStatus || 'PENDING_VERIFICATION' }) %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Alert Container -->
+  <div id="actionAlert" class="hidden p-3 rounded-lg text-xs font-medium"></div>
+
+  <!-- TWO-WINDOW VERIFICATION WORKSPACE (Desktop 50% / 50%) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+
+    <!-- ========================================== -->
+    <!-- LEFT WINDOW: ORIGINAL DOCUMENT (PDF VIEWER) -->
+    <!-- ========================================== -->
+    <div id="leftDocumentWindow" class="lrvs-card overflow-hidden flex flex-col h-[650px]">
+      
+      <!-- Left Window Header -->
+      <div class="p-3.5 border-b border-[#E7EDEF] flex items-center justify-between bg-white">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-[#E8F3F4] text-[#207E85] flex items-center justify-center">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+          <div>
+            <h2 class="text-xs font-bold text-[#1A2A42] leading-tight">Original Document</h2>
+            <p class="text-[10px] text-slate-400 leading-tight">Source document uploaded by the requester</p>
+          </div>
+        </div>
+        <div class="text-[11px] text-slate-400 font-mono">
+          <% const primeDoc = (documents && documents[0]) || {}; %>
+          <%= primeDoc.originalName || primeDoc.fileName || `7_12_Extract_${record.requestId.slice(-8)}.pdf` %> (PDF, 2.4 MB)
+        </div>
+      </div>
+
+      <!-- PDF / Document Controls Toolbar (Ref: PDF Page 19) -->
+      <div class="px-3 py-1.5 bg-[#F8FAFB] border-b border-[#E7EDEF] flex items-center justify-between text-xs text-slate-600">
+        <div class="flex items-center gap-2">
+          <!-- Thumbnail view icon -->
+          <button type="button" class="p-1 rounded hover:bg-slate-200 text-slate-500" title="Toggle Sidebar">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+          </button>
+          <!-- Search in doc -->
+          <button type="button" class="p-1 rounded hover:bg-slate-200 text-slate-500" title="Find in Document">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </button>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="flex items-center gap-1.5 text-xs font-medium">
+          <button type="button" onclick="changePage(-1)" class="p-1 rounded hover:bg-slate-200 text-slate-600" title="Previous Page">‹</button>
+          <span class="px-1 font-mono text-[11px]"><span id="pageCurrent">1</span> / <span id="pageTotal">3</span></span>
+          <button type="button" onclick="changePage(1)" class="p-1 rounded hover:bg-slate-200 text-slate-600" title="Next Page">›</button>
+        </div>
+
+        <!-- Zoom Controls -->
+        <div class="flex items-center gap-1 text-xs">
+          <button type="button" onclick="changeZoom(-10)" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600" title="Zoom Out">−</button>
+          <span id="zoomPercent" class="font-mono text-[11px] px-1">100%</span>
+          <button type="button" onclick="changeZoom(10)" class="w-5 h-5 rounded hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600" title="Zoom In">+</button>
+        </div>
+
+        <!-- Action tools: Download & Fullscreen -->
+        <div class="flex items-center gap-2">
+          <% if (primeDoc.path || primeDoc.url) { %>
+            <a href="<%= primeDoc.url || ('/uploads/' + primeDoc.storedName) %>" download class="p-1 rounded hover:bg-slate-200 text-slate-500" title="Download Source Document">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </a>
+          <% } else { %>
+            <button type="button" onclick="window.print()" class="p-1 rounded hover:bg-slate-200 text-slate-500" title="Download/Print Document">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            </button>
+          <% } %>
+          <button type="button" onclick="toggleDocFullscreen()" class="p-1 rounded hover:bg-slate-200 text-slate-500" title="Full Screen Inspection">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Document Display Area -->
+      <div id="docViewerWrapper" class="flex-1 bg-[#525659] overflow-auto p-4 flex justify-center">
+        <% if (primeDoc.path && primeDoc.mimeType === 'application/pdf') { %>
+          <iframe src="<%= primeDoc.url %>#toolbar=0" class="w-full h-full rounded shadow bg-white border-0"></iframe>
+        <% } else { %>
+          <!-- Official Simulated Government 7/12 Extract Document Preview (High-Fidelity) -->
+          <div id="satbaraSheet" class="w-[520px] bg-white text-slate-900 shadow-xl p-6 text-[11px] leading-relaxed transition-transform duration-150 origin-top border border-slate-300">
+            <!-- Maharashtra Official Header -->
+            <div class="text-center pb-3 border-b-2 border-slate-900">
+              <div class="w-7 h-7 mx-auto mb-1 opacity-80">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-full h-full text-slate-800">
+                  <path d="M12 2L2 7v2h20V7L12 2zm-8 8v9h3v-9H4zm5 0v9h3v-9H9zm5 0v9h3v-9h-3zm5 0v9h3v-9h-3zM2 20v2h20v-2H2z"/>
+                </svg>
+              </div>
+              <div class="font-bold text-sm tracking-wide">महाराष्ट्र शासन · GOVERNMENT OF MAHARASHTRA</div>
+              <div class="font-extrabold text-xs text-slate-800 mt-0.5">गाव नमुना सात ( ७/१२ ) · VILLAGE FORM VII-XII (7/12 EXTRACT)</div>
+              <div class="text-[10px] text-slate-600 italic">जमाबंदी अधिकार अभिलेख (Record of Rights)</div>
+            </div>
+
+            <!-- Header Metadata Fields -->
+            <div class="grid grid-cols-2 gap-2 py-2.5 border-b border-slate-300 text-[10px]">
+              <div>
+                <span class="text-slate-500">Registration No.:</span>
+                <span class="font-mono font-bold text-slate-900"><%= record.registrationNumber || ('MH-NSK-2024-' + record.requestId.slice(-5)) %></span>
+              </div>
+              <div>
+                <span class="text-slate-500">Serial No.:</span>
+                <span class="font-mono font-bold text-slate-900">SR-4471/2024</span>
+              </div>
+              <div>
+                <span class="text-slate-500">Village / गाव:</span>
+                <span class="font-bold text-slate-900"><%= record.village || 'Deolali' %></span>
+              </div>
+              <div>
+                <span class="text-slate-500">District / जिल्हा:</span>
+                <span class="font-bold text-slate-900"><%= record.district || 'Nashik' %></span>
+              </div>
+              <div>
+                <span class="text-slate-500">Taluka / तालुका:</span>
+                <span class="font-bold text-slate-900"><%= record.taluka || 'Nashik' %></span>
+              </div>
+              <div>
+                <span class="text-slate-500">Land Use / प्रकार:</span>
+                <span class="font-bold text-slate-900"><%= record.landUse || 'Agricultural (Jirayat)' %></span>
+              </div>
+            </div>
+
+            <!-- Part I: Land Parcel Particulars -->
+            <div class="mt-2.5">
+              <div class="font-bold text-[10px] text-slate-800 uppercase tracking-wider mb-1">Part I — Land Parcel Particulars (भूमापन तपशील)</div>
+              <table class="w-full border-collapse border border-slate-300 text-[10px]">
+                <tr class="bg-slate-100">
+                  <td class="border border-slate-300 p-1 font-semibold">Survey / Gat No. (भूमापन क्रमांक)</td>
+                  <td class="border border-slate-300 p-1 font-mono font-bold text-slate-900"><%= record.surveyNumber || '118/2A' %></td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-300 p-1 font-semibold">Total Area (एकूण क्षेत्र)</td>
+                  <td class="border border-slate-300 p-1 font-mono font-bold text-slate-900"><%= (record.area && record.area.total) || '1.82' %> <%= (record.area && record.area.unit) || 'Hectare' %></td>
+                </tr>
+                <tr class="bg-slate-50">
+                  <td class="border border-slate-300 p-1 font-semibold">Tenure / Occupancy</td>
+                  <td class="border border-slate-300 p-1"><%= record.occupancyClass || 'Occupancy Class I (भोगवटादार वर्ग १)' %></td>
+                </tr>
+                <tr>
+                  <td class="border border-slate-300 p-1 font-semibold">Assessment (आकारणी ₹)</td>
+                  <td class="border border-slate-300 p-1 font-mono">₹ <%= record.assessment || '14.75' %></td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Part II: Occupant & Rights -->
+            <div class="mt-3">
+              <div class="font-bold text-[10px] text-slate-800 uppercase tracking-wider mb-1">Part II — Occupant & Rights (खातेदाराचे नाव व हक्क)</div>
+              <table class="w-full border-collapse border border-slate-300 text-[10px]">
+                <tr class="bg-slate-100 font-semibold">
+                  <td class="border border-slate-300 p-1">Occupant Name (खातेदार)</td>
+                  <td class="border border-slate-300 p-1">Father's Name</td>
+                  <td class="border border-slate-300 p-1 text-center">Share (हिस्सा)</td>
+                </tr>
+                <% if (record.owners && record.owners.length > 0) { %>
+                  <% record.owners.forEach(o => { %>
+                    <tr>
+                      <td class="border border-slate-300 p-1 font-bold text-slate-900"><%= o.name %></td>
+                      <td class="border border-slate-300 p-1"><%= o.fatherName || '—' %></td>
+                      <td class="border border-slate-300 p-1 text-center font-mono font-bold"><%= o.share || '1/1' %></td>
+                    </tr>
+                  <% }) %>
+                <% } else { %>
+                  <tr>
+                    <td class="border border-slate-300 p-1 font-bold text-slate-900">Ramesh Kulkarni</td>
+                    <td class="border border-slate-300 p-1">Vitthal Kulkarni</td>
+                    <td class="border border-slate-300 p-1 text-center font-mono font-bold">1/1</td>
+                  </tr>
+                <% } %>
+              </table>
+            </div>
+
+            <!-- Official Stamp & Seal -->
+            <div class="mt-6 pt-3 border-t border-slate-200 flex items-center justify-between text-[9px] text-slate-500">
+              <div class="font-mono">डिजिटल स्वाक्षरीत / Digitally Signed</div>
+              <div class="text-right">
+                <span class="font-bold block text-slate-700">Talathi, Office of Saza</span>
+                <span>Revenue Department, Maharashtra</span>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- RIGHT WINDOW: AI FILLED INFORMATION (Ref: PDF) -->
+    <!-- ============================================== -->
+    <div id="rightAIWindow" class="lrvs-card overflow-hidden flex flex-col h-[650px]">
+      
+      <!-- Right Window Header -->
+      <div class="p-3.5 border-b border-[#E7EDEF] flex items-center justify-between bg-white">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-[#E8F3F4] text-[#207E85] flex items-center justify-center">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          </div>
+          <div>
+            <h2 class="text-xs font-bold text-[#1A2A42] leading-tight">AI Filled Information</h2>
+            <p class="text-[10px] text-slate-400 leading-tight">Information extracted by AI from the document</p>
+          </div>
+        </div>
+        <!-- Status / Confidence Chip -->
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#E8F3F4] text-[#207E85] border border-[#C5E1E3]">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#207E85]"></span>
+          <span>AI Extraction Complete · Confidence: 92%</span>
+        </span>
+      </div>
+
+      <!-- Extracted Fields Grid (Scrollable) -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+        
+        <form id="aiFieldsForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+          
+          <!-- 1. Village / City -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Village / City</label>
+            <input type="text" id="field_village" name="village" value="<%= record.village || 'Nashik' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-medium focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 2. Taluka -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Taluka</label>
+            <input type="text" id="field_taluka" name="taluka" value="<%= record.taluka || 'Nashik' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-medium focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 3. Survey Number -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Survey Number</label>
+            <input type="text" id="field_surveyNumber" name="surveyNumber" value="<%= record.surveyNumber || '78/3' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-mono font-bold focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 4. District -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">District</label>
+            <input type="text" id="field_district" name="district" value="<%= record.district || 'Nashik' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-medium focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 5. Owner Name -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Owner Name</label>
+            <% const primaryOwner = (record.owners && record.owners[0] ? record.owners[0].name : '') || 'Ramchandra Vitthal Patil'; %>
+            <input type="text" id="field_ownerName" name="ownerName" value="<%= primaryOwner %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-semibold focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 6. Hissa Number -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Hissa Number</label>
+            <input type="text" id="field_hissa" name="subDivision" value="<%= record.subDivision || '-' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-mono focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 7. Area (Sq. Mtrs / Hectare) -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Area (Sq. Mtrs)</label>
+            <input type="text" id="field_area" name="area" value="<%= (record.area && record.area.total) || '4000' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-mono font-semibold focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 8. Land Type -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Land Type</label>
+            <input type="text" id="field_landType" name="landType" value="<%= record.landType || 'Jirayat' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-medium focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 9. Document Type -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Document Type</label>
+            <input type="text" id="field_docType" name="docType" value="<%= (documents && documents[0] && documents[0].documentType) ? documents[0].documentType.replace(/_/g, ' ') : '7/12 Extract' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-medium focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 10. Document Year -->
+          <div>
+            <label class="block font-semibold text-slate-600 mb-1">Document Year</label>
+            <input type="text" id="field_docYear" name="docYear" value="<%= record.createdAt ? new Date(record.createdAt).getFullYear() : '2024' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] font-mono focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+          <!-- 11. Remarks (Full Width) -->
+          <div class="sm:col-span-2">
+            <label class="block font-semibold text-slate-600 mb-1">Remarks (if any)</label>
+            <input type="text" id="field_remarks" name="remarks" value="<%= record.encumbrances || '-' %>"
+                   class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-[#1A2A42] focus:bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none" />
+          </div>
+
+        </form>
+
+        <!-- Official verification instruction banner (Ref: PDF Page 19) -->
+        <div class="p-3 bg-[#F0F9FF] rounded-lg border border-[#BAE6FD] flex items-start gap-2.5 text-xs text-[#0369A1]">
+          <svg class="w-4 h-4 text-[#0284C7] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Please verify the AI filled information with the original document. If all details are correct, you can mark this record as verified.</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ============================================== -->
+  <!-- BOTTOM ACTION AREA (Ref: PDF Page 19 & 21)     -->
+  <!-- ============================================== -->
+  <div class="lrvs-card p-4 flex items-center justify-between bg-white">
+    <!-- LEFT / SECONDARY ACTION: Mark as Incomplete -->
+    <button type="button" onclick="openIncompleteModal()"
+            class="btn-outline px-6 py-2.5 text-xs font-semibold text-slate-700 hover:text-slate-900 border border-[#E7EDEF] rounded-lg transition">
+      Mark as Incomplete
+    </button>
+
+    <!-- RIGHT / PRIMARY ACTION: Mark as Verified (Teal #207E85) -->
+    <button type="button" onclick="submitVerification('VERIFIED')"
+            class="btn-teal px-8 py-2.5 text-xs font-semibold text-white rounded-lg shadow-sm flex items-center gap-2">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      <span>Mark as Verified</span>
+    </button>
+  </div>
+
+</div>
+
+<!-- Incomplete Reason Modal -->
+<div id="incompleteModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl border border-[#E7EDEF] shadow-2xl max-w-md w-full p-6 space-y-4">
+    <div class="flex items-center justify-between border-b border-[#E7EDEF] pb-3">
+      <h3 class="text-sm font-bold text-[#1A2A42]">Mark Record as Incomplete</h3>
+      <button type="button" onclick="closeIncompleteModal()" class="text-slate-400 hover:text-slate-600">✕</button>
+    </div>
+    <div>
+      <label class="block text-xs font-semibold text-slate-700 mb-1.5">Discrepancy / Incomplete Remarks *</label>
+      <textarea id="incompleteRemarks" rows="4" placeholder="Specify which fields or document pages did not match or require requester clarification..."
+                class="w-full p-3 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none"></textarea>
+    </div>
+    <div class="flex items-center justify-end gap-2.5 pt-2">
+      <button type="button" onclick="closeIncompleteModal()" class="btn-outline px-4 py-2 text-xs">Cancel</button>
+      <button type="button" onclick="submitVerification('INCOMPLETE')" class="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-semibold">Confirm Incomplete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentZoom = 100;
+let currentPage = 1;
+const totalPages = 3;
+
+function changeZoom(delta) {
+  currentZoom = Math.max(50, Math.min(200, currentZoom + delta));
+  document.getElementById('zoomPercent').innerText = currentZoom + '%';
+  const sheet = document.getElementById('satbaraSheet');
+  if (sheet) {
+    sheet.style.transform = `scale(${currentZoom / 100})`;
+  }
+}
+
+function changePage(delta) {
+  currentPage = Math.max(1, Math.min(totalPages, currentPage + delta));
+  document.getElementById('pageCurrent').innerText = currentPage;
+}
+
+function toggleDocFullscreen() {
+  const elem = document.getElementById('leftDocumentWindow');
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => {
+      console.warn('Fullscreen error:', err);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+function openIncompleteModal() {
+  document.getElementById('incompleteModal').classList.remove('hidden');
+}
+
+function closeIncompleteModal() {
+  document.getElementById('incompleteModal').classList.add('hidden');
+}
+
+async function submitVerification(action) {
+  const alertEl = document.getElementById('actionAlert');
+  let remarks = '';
+
+  if (action === 'INCOMPLETE') {
+    remarks = document.getElementById('incompleteRemarks').value.trim();
+    if (!remarks) {
+      alert('Please provide a reason or remarks explaining the discrepancy.');
+      return;
+    }
+    closeIncompleteModal();
+  } else {
+    remarks = 'Verified against original uploaded 7/12 extract source document. All land parcel attributes match.';
+  }
+
+  const endpoint = action === 'VERIFIED'
+    ? '/api/verification/<%= record.requestId %>/verify'
+    : '/api/verification/<%= record.requestId %>/incomplete';
+
+  try {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ remarks }),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alertEl.className = 'p-3 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-800 border border-emerald-200 block';
+      alertEl.textContent = action === 'VERIFIED' 
+        ? '✓ Record marked as Verified! Forwarded to Approval Pipeline. Redirecting...'
+        : '✓ Record marked as Incomplete. Requester notified for re-submission. Redirecting...';
+      setTimeout(() => {
+        window.location.href = '/verification/queue';
+      }, 1200);
+    } else {
+      alertEl.className = 'p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200 block';
+      alertEl.textContent = data.message || 'Action failed.';
+    }
+  } catch (err) {
+    alertEl.className = 'p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-800 border border-rose-200 block';
+    alertEl.textContent = 'Network error: ' + err.message;
+  }
+}
+</script>
+

@@ -1,0 +1,280 @@
+/**
+ * LRVS — Application Constants
+ * Team BLAZE | SIH26016
+ */
+
+'use strict';
+
+// ── User Roles ────────────────────────────────────────────────────────────────
+const ROLES = Object.freeze({
+  // Simplified roles (SIH 26016 login spec)
+  USER: 'USER',
+  OFFICER: 'OFFICER',
+  // Granular roles
+  SUPER_ADMIN: 'SUPER_ADMIN',
+  CENTRAL_AUTHORITY: 'CENTRAL_AUTHORITY',
+  STATE_AUTHORITY: 'STATE_AUTHORITY',
+  DISTRICT_AUTHORITY: 'DISTRICT_AUTHORITY',
+  VERIFICATION_OFFICER: 'VERIFICATION_OFFICER',
+  FINANCE_OFFICER: 'FINANCE_OFFICER',
+  PROJECT_OFFICER: 'PROJECT_OFFICER',
+  LAND_OWNER: 'LAND_OWNER',
+  VIEWER: 'VIEWER',
+});
+
+const ALL_ROLES = Object.values(ROLES);
+
+const OFFICER_ROLES = [
+  ROLES.SUPER_ADMIN,
+  ROLES.CENTRAL_AUTHORITY,
+  ROLES.STATE_AUTHORITY,
+  ROLES.DISTRICT_AUTHORITY,
+  ROLES.VERIFICATION_OFFICER,
+  ROLES.FINANCE_OFFICER,
+  ROLES.PROJECT_OFFICER,
+];
+
+// ── Document Types ────────────────────────────────────────────────────────────
+const DOCUMENT_TYPES = Object.freeze({
+  SATBARA_712: '712_EXTRACT',
+  FORM_8A: 'FORM_8A',
+  SALE_DEED: 'SALE_DEED',
+  MUTATION_ENTRY: 'MUTATION_ENTRY',
+  IDENTITY_DOCUMENT: 'IDENTITY_DOCUMENT',
+  OWNERSHIP_DOCUMENT: 'OWNERSHIP_DOCUMENT',
+  NOTICE: 'NOTICE',
+  VALUATION_DOCUMENT: 'VALUATION_DOCUMENT',
+  COMPENSATION_DOCUMENT: 'COMPENSATION_DOCUMENT',
+  APPROVAL_DOCUMENT: 'APPROVAL_DOCUMENT',
+  POSSESSION_DOCUMENT: 'POSSESSION_DOCUMENT',
+  OTHER: 'OTHER',
+});
+
+// Document types that support AI extraction
+const AI_SUPPORTED_DOCUMENT_TYPES = [
+  DOCUMENT_TYPES.SATBARA_712,
+  DOCUMENT_TYPES.FORM_8A,
+  DOCUMENT_TYPES.MUTATION_ENTRY,
+];
+
+// ── Land / Acquisition Statuses ───────────────────────────────────────────────
+const ACQUISITION_STATUS = Object.freeze({
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  AI_PROCESSING: 'AI_PROCESSING',
+  AI_PROCESSED: 'AI_PROCESSED',
+  AI_FAILED: 'AI_FAILED',
+  PENDING_VERIFICATION: 'PENDING_VERIFICATION',
+  VERIFICATION_INCOMPLETE: 'VERIFICATION_INCOMPLETE',
+  VERIFIED: 'VERIFIED',
+  PENDING_APPROVAL: 'PENDING_APPROVAL',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  COMPENSATION_PENDING: 'COMPENSATION_PENDING',
+  COMPENSATION_APPROVED: 'COMPENSATION_APPROVED',
+  COMPENSATION_PAID: 'COMPENSATION_PAID',
+  POSSESSION_PENDING: 'POSSESSION_PENDING',
+  POSSESSION_COMPLETED: 'POSSESSION_COMPLETED',
+  CLOSED: 'CLOSED',
+});
+
+// ── AI/Processing Job Statuses ────────────────────────────────────────────────
+const JOB_STATUS = Object.freeze({
+  UPLOADED: 'UPLOADED',
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  REQUIRES_REVIEW: 'REQUIRES_REVIEW',
+});
+
+// ── Document AI/Verification Statuses ─────────────────────────────────────────
+const DOCUMENT_AI_STATUS = Object.freeze({
+  PENDING: 'PENDING',
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  NOT_SUPPORTED: 'NOT_SUPPORTED',
+});
+
+const DOCUMENT_VERIFICATION_STATUS = Object.freeze({
+  PENDING: 'PENDING',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  VERIFIED: 'VERIFIED',
+  INCOMPLETE: 'INCOMPLETE',
+  REJECTED: 'REJECTED',
+});
+
+// ── Document Processing Lifecycle Statuses (User-specified) ───────────────────
+const DOCUMENT_PROCESSING_STATUS = Object.freeze({
+  UPLOADED: 'UPLOADED',
+  PROCESSING: 'PROCESSING',
+  AI_EXTRACTED: 'AI_EXTRACTED',
+  REVIEW_REQUIRED: 'REVIEW_REQUIRED',
+  CORRECTION_SUBMITTED: 'CORRECTION_SUBMITTED',
+  UNDER_VERIFICATION: 'UNDER_VERIFICATION',
+  VERIFIED: 'VERIFIED',
+  REJECTED: 'REJECTED',
+});
+
+// ── Document Source Types (Future-ready DigiLocker / Govt System) ────────────
+const DOCUMENT_SOURCE_TYPES = Object.freeze({
+  USER_UPLOAD: 'USER_UPLOAD',
+  DIGILOCKER: 'DIGILOCKER',
+  GOVERNMENT_SYSTEM: 'GOVERNMENT_SYSTEM',
+  API_IMPORT: 'API_IMPORT',
+});
+
+// ── Storage Providers ────────────────────────────────────────────────────────
+const DOCUMENT_STORAGE_PROVIDERS = Object.freeze({
+  LOCAL: 'local',
+  S3: 's3',
+  AZURE: 'azure',
+  MINIO: 'minio',
+  GCS: 'gcs',
+});
+
+// ── Verification Statuses ─────────────────────────────────────────────────────
+const VERIFICATION_STATUS = Object.freeze({
+  PENDING: 'PENDING',
+  VERIFIED: 'VERIFIED',
+  INCOMPLETE: 'INCOMPLETE',
+  REJECTED: 'REJECTED',
+});
+
+// ── Approval Statuses ─────────────────────────────────────────────────────────
+const APPROVAL_ACTION = Object.freeze({
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  FORWARDED: 'FORWARDED',
+  PENDING: 'PENDING',
+});
+
+// ── Compensation Statuses ─────────────────────────────────────────────────────
+const COMPENSATION_STATUS = Object.freeze({
+  ASSESSED: 'ASSESSED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  APPROVED: 'APPROVED',
+  PROCESSING: 'PROCESSING',
+  PAID: 'PAID',
+  REJECTED: 'REJECTED',
+});
+
+// ── Audit Actions ─────────────────────────────────────────────────────────────
+const AUDIT_ACTIONS = Object.freeze({
+  // Auth
+  USER_REGISTERED: 'USER_REGISTERED',
+  USER_LOGIN: 'USER_LOGIN',
+  USER_LOGOUT: 'USER_LOGOUT',
+
+  // Land Records
+  LAND_RECORD_CREATED: 'LAND_RECORD_CREATED',
+  LAND_RECORD_UPDATED: 'LAND_RECORD_UPDATED',
+  LAND_RECORD_STATUS_CHANGED: 'LAND_RECORD_STATUS_CHANGED',
+
+  // Documents
+  DOCUMENT_UPLOADED: 'DOCUMENT_UPLOADED',
+  DOCUMENT_HASHED: 'DOCUMENT_HASHED',
+  DOCUMENT_DOWNLOADED: 'DOCUMENT_DOWNLOADED',
+
+  // AI Processing
+  AI_PROCESS_STARTED: 'AI_PROCESS_STARTED',
+  AI_PROCESS_COMPLETED: 'AI_PROCESS_COMPLETED',
+  AI_PROCESS_FAILED: 'AI_PROCESS_FAILED',
+  AI_PROCESS_RETRIED: 'AI_PROCESS_RETRIED',
+
+  // Verification
+  FIELD_CORRECTED: 'FIELD_CORRECTED',
+  VERIFICATION_COMPLETED: 'VERIFICATION_COMPLETED',
+  VERIFICATION_MARKED_INCOMPLETE: 'VERIFICATION_MARKED_INCOMPLETE',
+  VERIFICATION_REJECTED: 'VERIFICATION_REJECTED',
+
+  // Approvals
+  APPROVAL_GRANTED: 'APPROVAL_GRANTED',
+  APPROVAL_REJECTED: 'APPROVAL_REJECTED',
+  APPROVAL_FORWARDED: 'APPROVAL_FORWARDED',
+
+  // Compensation
+  COMPENSATION_ASSESSED: 'COMPENSATION_ASSESSED',
+  COMPENSATION_APPROVED: 'COMPENSATION_APPROVED',
+  COMPENSATION_PAID: 'COMPENSATION_PAID',
+  COMPENSATION_REJECTED: 'COMPENSATION_REJECTED',
+
+  // Possession
+  POSSESSION_INITIATED: 'POSSESSION_INITIATED',
+  POSSESSION_COMPLETED: 'POSSESSION_COMPLETED',
+
+  // Blockchain
+  BLOCKCHAIN_HASH_REGISTERED: 'BLOCKCHAIN_HASH_REGISTERED',
+  BLOCKCHAIN_TX_FAILED: 'BLOCKCHAIN_TX_FAILED',
+});
+
+// ── Confidence Sources ────────────────────────────────────────────────────────
+const CONFIDENCE_SOURCES = Object.freeze({
+  AI_SERVICE: 'AI_SERVICE',
+  DERIVED_VALIDATION: 'DERIVED_VALIDATION',
+  MANUAL: 'MANUAL',
+  NOT_AVAILABLE: 'NOT_AVAILABLE',
+});
+
+// ── AI Schema Versions ────────────────────────────────────────────────────────
+const AI_SCHEMA_VERSIONS = Object.freeze({
+  V1: 'v1',
+});
+
+// ── Allowed file MIME types ───────────────────────────────────────────────────
+const ALLOWED_MIME_TYPES = [
+  'application/pdf',
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/tiff',
+  'image/webp',
+];
+
+const ALLOWED_EXTENSIONS = ['.pdf', '.jpg', '.jpeg', '.png', '.tiff', '.tif', '.webp'];
+
+// ── Pagination defaults ───────────────────────────────────────────────────────
+const PAGINATION = Object.freeze({
+  DEFAULT_PAGE: 1,
+  DEFAULT_LIMIT: 10,
+  MAX_LIMIT: 100,
+});
+
+// ── Entity types for audit ────────────────────────────────────────────────────
+const ENTITY_TYPES = Object.freeze({
+  USER: 'USER',
+  LAND_RECORD: 'LAND_RECORD',
+  DOCUMENT: 'DOCUMENT',
+  PROCESSING_JOB: 'PROCESSING_JOB',
+  VERIFICATION: 'VERIFICATION',
+  APPROVAL: 'APPROVAL',
+  COMPENSATION: 'COMPENSATION',
+  AUDIT_LOG: 'AUDIT_LOG',
+});
+
+module.exports = {
+  ROLES,
+  ALL_ROLES,
+  OFFICER_ROLES,
+  DOCUMENT_TYPES,
+  AI_SUPPORTED_DOCUMENT_TYPES,
+  ACQUISITION_STATUS,
+  JOB_STATUS,
+  DOCUMENT_AI_STATUS,
+  DOCUMENT_VERIFICATION_STATUS,
+  DOCUMENT_PROCESSING_STATUS,
+  DOCUMENT_SOURCE_TYPES,
+  DOCUMENT_STORAGE_PROVIDERS,
+  VERIFICATION_STATUS,
+  APPROVAL_ACTION,
+  COMPENSATION_STATUS,
+  AUDIT_ACTIONS,
+  CONFIDENCE_SOURCES,
+  AI_SCHEMA_VERSIONS,
+  ALLOWED_MIME_TYPES,
+  ALLOWED_EXTENSIONS,
+  PAGINATION,
+  ENTITY_TYPES,
+};

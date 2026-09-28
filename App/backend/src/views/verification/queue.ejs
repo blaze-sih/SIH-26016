@@ -1,0 +1,167 @@
+<!-- Data Checker — Records List (Ref: PDF Page 18 & 20) -->
+<div class="space-y-5">
+
+  <!-- Page Title & Header -->
+  <div>
+    <h1 class="text-xl font-bold tracking-tight text-[#1A2A42]">Data Checker</h1>
+    <p class="text-xs text-slate-500 mt-0.5">Review and verify AI-extracted data, check for accuracy, and mark records for approval.</p>
+  </div>
+
+  <!-- Filter Bar Card (Ref: PDF Page 18) -->
+  <div class="lrvs-card p-4 bg-white">
+    <form method="GET" action="/verification/queue" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 items-end text-xs">
+      <!-- Status Filter -->
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1">Status</label>
+        <select name="status" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-slate-700 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#207E85]">
+          <option value="">Select status</option>
+          <option value="PENDING_VERIFICATION" <%= (filters && filters.status === 'PENDING_VERIFICATION') ? 'selected' : '' %>>Pending Check</option>
+          <option value="AI_PROCESSED" <%= (filters && filters.status === 'AI_PROCESSED') ? 'selected' : '' %>>AI Processed</option>
+          <option value="VERIFIED" <%= (filters && filters.status === 'VERIFIED') ? 'selected' : '' %>>Verified</option>
+          <option value="VERIFICATION_INCOMPLETE" <%= (filters && filters.status === 'VERIFICATION_INCOMPLETE') ? 'selected' : '' %>>Incomplete</option>
+        </select>
+      </div>
+
+      <!-- Document Type Filter -->
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1">Document Type</label>
+        <select name="documentType" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-slate-700 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#207E85]">
+          <option value="">Select document type</option>
+          <option value="712_EXTRACT" <%= (filters && filters.documentType === '712_EXTRACT') ? 'selected' : '' %>>7/12 Extract</option>
+          <option value="PROPERTY_CARD" <%= (filters && filters.documentType === 'PROPERTY_CARD') ? 'selected' : '' %>>Property Card</option>
+          <option value="MUTATION_ENTRY" <%= (filters && filters.documentType === 'MUTATION_ENTRY') ? 'selected' : '' %>>Mutation Record</option>
+          <option value="SALE_DEED" <%= (filters && filters.documentType === 'SALE_DEED') ? 'selected' : '' %>>Sale Deed</option>
+        </select>
+      </div>
+
+      <!-- Date Range Filter -->
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1">Date Range</label>
+        <input type="text" placeholder="Select date range" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-slate-700 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#207E85]" />
+      </div>
+
+      <!-- Source Document -->
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1">Source Document</label>
+        <select class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg bg-[#F8FAFB] text-slate-700 focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#207E85]">
+          <option value="">Select source</option>
+          <option value="portal">Citizen Portal</option>
+          <option value="internal">Revenue Internal</option>
+        </select>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <a href="/verification/queue" class="btn-outline flex-1 py-2 text-center text-xs">Reset</a>
+        <button type="submit" class="btn-teal flex-1 py-2 text-center text-xs">Apply Filters</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Records Table Card -->
+  <div class="lrvs-card overflow-hidden bg-white">
+    <!-- Card Header Strip -->
+    <div class="p-4 border-b border-[#E7EDEF] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div>
+        <h2 class="text-sm font-bold text-[#1A2A42]">Records for Data Check</h2>
+        <p class="text-[11px] text-slate-400">These records have been processed by AI and are pending verification.</p>
+      </div>
+      <div class="flex items-center gap-3 text-xs text-slate-500">
+        <span>Showing 1-<%= (queue && queue.records && queue.records.length) || 0 %> of <%= (queue && queue.total) || 0 %> records</span>
+        <select class="px-2 py-1 border border-[#E7EDEF] rounded bg-white text-xs text-slate-600 focus:outline-none">
+          <option>Newest First</option>
+          <option>Oldest First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <% if (queue && queue.records && queue.records.length > 0) { %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs data-table">
+        <thead>
+          <tr>
+            <th class="w-10 text-center"><input type="checkbox" class="rounded border-[#E7EDEF] text-[#207E85]"></th>
+            <th>Request ID</th>
+            <th>Property Details</th>
+            <th>Document Type</th>
+            <th>AI Confidence</th>
+            <th>Processed On</th>
+            <th>Status</th>
+            <th class="text-right pr-6">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% queue.records.forEach(function(rec) { %>
+          <tr class="hover:bg-[#F8FAFB] transition">
+            <td class="text-center"><input type="checkbox" class="rounded border-[#E7EDEF] text-[#207E85]"></td>
+            <td class="font-mono font-bold text-[#207E85]">
+              <a href="/verification/<%= rec.requestId %>" class="hover:underline"><%= rec.requestId %></a>
+            </td>
+            <td class="font-medium text-[#1A2A42]">
+              Survey No. <%= rec.surveyNumber || '128/4' %><br/>
+              <span class="text-[11px] text-slate-400"><%= rec.village || 'Pune' %>, <%= rec.district || 'Maharashtra' %></span>
+            </td>
+            <td>
+              <span class="font-medium text-slate-700">
+                <%= (rec.documentType || '7/12 Extract').replace(/_/g, ' ') %>
+              </span>
+            </td>
+            <td>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#E8F3F4] text-[#207E85] border border-[#C5E1E3]">
+                94%
+              </span>
+            </td>
+            <td class="text-slate-500 text-[11px]">
+              <%= rec.createdAt ? new Date(rec.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '12 Aug 2024, 10:24 AM' %>
+            </td>
+            <td>
+              <%- include('../partials/status-badge', { status: rec.acquisitionStatus || rec.status || 'PENDING_VERIFICATION' }) %>
+            </td>
+            <td class="text-right pr-6">
+              <a href="/verification/<%= rec.requestId %>"
+                 class="btn-outline inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-[#207E85] hover:text-[#19656b] border border-[#C5E1E3] hover:border-[#207E85] rounded-lg">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                <span>Check data</span>
+              </a>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Table Footer / Pagination -->
+    <div class="p-3 border-t border-[#E7EDEF] flex items-center justify-between text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span>Show</span>
+        <select class="border border-[#E7EDEF] rounded px-1.5 py-0.5 bg-white text-xs">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+        <span>per page</span>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button class="w-7 h-7 rounded border border-[#E7EDEF] flex items-center justify-center hover:bg-[#F3F8F9]">‹</button>
+        <button class="w-7 h-7 rounded bg-[#207E85] text-white font-bold flex items-center justify-center">1</button>
+        <button class="w-7 h-7 rounded border border-[#E7EDEF] flex items-center justify-center hover:bg-[#F3F8F9]">2</button>
+        <button class="w-7 h-7 rounded border border-[#E7EDEF] flex items-center justify-center hover:bg-[#F3F8F9]">3</button>
+        <button class="w-7 h-7 rounded border border-[#E7EDEF] flex items-center justify-center hover:bg-[#F3F8F9]">›</button>
+      </div>
+    </div>
+
+    <% } else { %>
+    <div class="text-center py-12 px-4">
+      <div class="w-12 h-12 rounded-full bg-[#E8F3F4] text-[#207E85] flex items-center justify-center mx-auto mb-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      </div>
+      <h3 class="text-sm font-semibold text-[#1A2A42]">No records pending check</h3>
+      <p class="mt-1 text-xs text-slate-400">All submitted land records have been verified by the officer team.</p>
+    </div>
+    <% } %>
+  </div>
+
+</div>
+

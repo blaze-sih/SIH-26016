@@ -1,0 +1,128 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "requestId": "NA-2026-0245",
+        "projectName": "Ring Road Extension",
+        "village": "Adgaon",
+        "taluka": "Nashik",
+        "district": "Nashik",
+        "landAreaHa": 45.2,
+        "status": "Under Verification",
+        "color": "#3B82F6",
+        "submittedOn": "12 Aug 2026"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.855,
+          20.045
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "requestId": "NA-2026-0244",
+        "projectName": "Industrial Park",
+        "village": "Sinnar",
+        "taluka": "Sinnar",
+        "district": "Nashik",
+        "landAreaHa": 78.4,
+        "status": "Approved",
+        "color": "#10B981",
+        "submittedOn": "11 Aug 2026"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.9984,
+          19.8458
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "requestId": "NA-2026-0243",
+        "projectName": "River Link Project",
+        "village": "Trimbak",
+        "taluka": "Trimbakeshwar",
+        "district": "Nashik",
+        "landAreaHa": 32.6,
+        "status": "Pending",
+        "color": "#D97706",
+        "submittedOn": "10 Aug 2026"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.5312,
+          19.9366
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "requestId": "NA-2026-0242",
+        "projectName": "Solar Park",
+        "village": "Niphad",
+        "taluka": "Niphad",
+        "district": "Nashik",
+        "landAreaHa": 65,
+        "status": "Under Verification",
+        "color": "#3B82F6",
+        "submittedOn": "10 Aug 2026"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.1086,
+          20.0863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "requestId": "NA-2026-0241",
+        "projectName": "Logistics Hub",
+        "village": "Igatpuri",
+        "taluka": "Igatpuri",
+        "district": "Nashik",
+        "landAreaHa": 28.5,
+        "status": "Rejected",
+        "color": "#EF4444",
+        "submittedOn": "09 Aug 2026"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.5539,
+          19.6967
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Nashik City Hub",
+        "village": "Nashik",
+        "taluka": "Nashik",
+        "district": "Nashik",
+        "status": "Approved",
+        "color": "#10B981"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.7898,
+          19.9975
+        ]
+      }
+    }
+  ]
+}

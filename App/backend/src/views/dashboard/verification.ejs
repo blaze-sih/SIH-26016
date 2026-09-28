@@ -1,0 +1,552 @@
+<!-- LRVS Dashboard — Primary Operational View (PDF Pages 3, 4, 5) -->
+<div class="space-y-6">
+
+  <!-- 1. Header Section -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E7EDEF]">
+    <div>
+      <div class="flex items-center gap-2.5">
+        <h1 class="text-2xl font-bold tracking-tight text-[#1A2A42]">Dashboard</h1>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#207E85]/10 text-[#207E85] border border-[#207E85]/20">
+          Scrutiny & Verification Portal
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">Real-time land record scrutiny, verification, and multi-tier approval tracking</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="hidden sm:flex items-center gap-2 text-xs font-medium text-slate-500 bg-white px-3 py-2 rounded-lg border border-[#E7EDEF] shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Live System Status: <strong class="text-[#1A2A42]">Operational</strong></span>
+      </div>
+      <a href="/land/create" class="px-4 py-2 bg-[#207E85] hover:bg-[#19656b] text-white text-xs font-semibold rounded-lg shadow-sm transition inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        <span>New Property Request</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 2. Four Summary Cards Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    
+    <!-- Card 1: Pending Requests -->
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm flex flex-col justify-between transition hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Requests</span>
+          <div class="text-3xl font-extrabold text-[#1A2A42] mt-1">
+            <%= (summary && summary.pendingRequests) || (queue && queue.length) || 18 %>
+          </div>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-[#207E85]/10 flex items-center justify-center text-[#207E85]">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center justify-between text-xs">
+        <span class="text-slate-500">Awaiting scrutiny & check</span>
+        <span class="inline-flex items-center font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px]">
+          +4 today
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 2: In Review -->
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm flex flex-col justify-between transition hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">In Review</span>
+          <div class="text-3xl font-extrabold text-[#1A2A42] mt-1">
+            <%= (summary && summary.inReview) || 7 %>
+          </div>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-[#207E85]/10 flex items-center justify-center text-[#207E85]">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center justify-between text-xs">
+        <span class="text-slate-500">Under active verification</span>
+        <span class="inline-flex items-center font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px]">
+          +2 today
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 3: Approved -->
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm flex flex-col justify-between transition hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Approved</span>
+          <div class="text-3xl font-extrabold text-[#1A2A42] mt-1">
+            <%= (summary && summary.approved) || verifiedCount || 142 %>
+          </div>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-700">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center justify-between text-xs">
+        <span class="text-slate-500">Passed multi-tier scrutiny</span>
+        <span class="inline-flex items-center font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px]">
+          +12 today
+        </span>
+      </div>
+    </div>
+
+    <!-- Card 4: Rejected -->
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm flex flex-col justify-between transition hover:shadow-md">
+      <div class="flex items-start justify-between">
+        <div>
+          <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Rejected</span>
+          <div class="text-3xl font-extrabold text-[#1A2A42] mt-1">
+            <%= (summary && summary.rejected) || incompleteCount || 5 %>
+          </div>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-rose-600">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center justify-between text-xs">
+        <span class="text-slate-500">Flagged with discrepancies</span>
+        <span class="inline-flex items-center font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[11px]">
+          -1 today
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 3. Charts Section (2 Columns) -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <!-- Chart 1: Verification Activity -->
+    <div class="bg-white p-6 rounded-xl border border-[#E7EDEF] shadow-sm space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-base font-bold text-[#1A2A42]">Verification Activity</h2>
+          <p class="text-xs text-slate-500">Daily document verifications and processing velocity</p>
+        </div>
+        <!-- Time Range Toggle -->
+        <div class="inline-flex rounded-lg border border-[#E7EDEF] bg-[#F3F8F9] p-0.5 text-xs font-medium" id="chartRangeButtons">
+          <button type="button" onclick="setChartRange(7)" id="btn-range-7" class="px-3 py-1 rounded-md bg-[#207E85] text-white font-semibold transition">7 Days</button>
+          <button type="button" onclick="setChartRange(30)" id="btn-range-30" class="px-3 py-1 rounded-md text-slate-600 hover:text-[#1A2A42] transition">30 Days</button>
+          <button type="button" onclick="setChartRange(90)" id="btn-range-90" class="px-3 py-1 rounded-md text-slate-600 hover:text-[#1A2A42] transition">90 Days</button>
+        </div>
+      </div>
+      <div class="relative h-[250px] w-full">
+        <canvas id="verificationActivityChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Chart 2: Request Distribution -->
+    <div class="bg-white p-6 rounded-xl border border-[#E7EDEF] shadow-sm space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-base font-bold text-[#1A2A42]">Request Distribution</h2>
+          <p class="text-xs text-slate-500">Records categorized by current processing stage</p>
+        </div>
+        <span class="text-xs font-semibold px-2 py-1 rounded bg-[#F3F8F9] text-slate-600 border border-[#E7EDEF]">
+          Active Pipeline
+        </span>
+      </div>
+      <div class="relative h-[250px] w-full">
+        <canvas id="requestDistributionChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 4. Four Quick Action Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+    <!-- Action 1: Create Property Request -->
+    <a href="/land/create" class="group bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm hover:border-[#207E85]/40 transition hover:shadow-md flex flex-col justify-between">
+      <div class="space-y-3">
+        <div class="w-10 h-10 rounded-lg bg-[#207E85]/10 group-hover:bg-[#207E85] flex items-center justify-center text-[#207E85] group-hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-[#1A2A42] group-hover:text-[#207E85] transition">Create Property Request</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Upload source 7/12 & initiate automated AI extraction</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center gap-1 text-xs font-semibold text-[#207E85]">
+        <span>Add Record</span>
+        <span class="transition group-hover:translate-x-1">→</span>
+      </div>
+    </a>
+
+    <!-- Action 2: Open Verification Queue -->
+    <a href="/verification/queue" class="group bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm hover:border-[#207E85]/40 transition hover:shadow-md flex flex-col justify-between">
+      <div class="space-y-3">
+        <div class="w-10 h-10 rounded-lg bg-[#207E85]/10 group-hover:bg-[#207E85] flex items-center justify-center text-[#207E85] group-hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-[#1A2A42] group-hover:text-[#207E85] transition">Open Verification Queue</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Audit extracted fields against original document in 2-window view</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center gap-1 text-xs font-semibold text-[#207E85]">
+        <span>Open Queue (<%= (queue && queue.length) || 7 %>)</span>
+        <span class="transition group-hover:translate-x-1">→</span>
+      </div>
+    </a>
+
+    <!-- Action 3: Review Approvals -->
+    <a href="/approvals/queue" class="group bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm hover:border-[#207E85]/40 transition hover:shadow-md flex flex-col justify-between">
+      <div class="space-y-3">
+        <div class="w-10 h-10 rounded-lg bg-[#207E85]/10 group-hover:bg-[#207E85] flex items-center justify-center text-[#207E85] group-hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-[#1A2A42] group-hover:text-[#207E85] transition">Review Approvals</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Authorize Stage 1, Stage 2, and Stage 3 clearance decisions</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center gap-1 text-xs font-semibold text-[#207E85]">
+        <span>Review Approvals</span>
+        <span class="transition group-hover:translate-x-1">→</span>
+      </div>
+    </a>
+
+    <!-- Action 4: View Audit Trail -->
+    <a href="/audit" class="group bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm hover:border-[#207E85]/40 transition hover:shadow-md flex flex-col justify-between">
+      <div class="space-y-3">
+        <div class="w-10 h-10 rounded-lg bg-[#207E85]/10 group-hover:bg-[#207E85] flex items-center justify-center text-[#207E85] group-hover:text-white transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-[#1A2A42] group-hover:text-[#207E85] transition">View Audit Trail</h3>
+          <p class="text-xs text-slate-500 mt-1 leading-relaxed">Inspect immutable audit events, timestamped decisions & logs</p>
+        </div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-[#E7EDEF] flex items-center gap-1 text-xs font-semibold text-[#207E85]">
+        <span>Audit Trail</span>
+        <span class="transition group-hover:translate-x-1">→</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- 5. Recent Requests Table -->
+  <div class="bg-white rounded-xl border border-[#E7EDEF] shadow-sm overflow-hidden space-y-0">
+    <div class="p-5 border-b border-[#E7EDEF] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div>
+        <h2 class="text-base font-bold text-[#1A2A42]">Recent Requests</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Latest property applications submitted for verification</p>
+      </div>
+      <a href="/land/requests" class="text-xs font-semibold text-[#207E85] hover:underline flex items-center gap-1">
+        <span>View All Requests</span>
+        <span>→</span>
+      </a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs data-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Applicant</th>
+            <th>Registration No</th>
+            <th>Status</th>
+            <th>Assigned Officer</th>
+            <th>Updated</th>
+            <th class="text-right pr-6">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentRecords && recentRecords.length > 0) { %>
+            <% recentRecords.forEach(rec => { %>
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="font-mono font-bold text-[#207E85]">
+                  <a href="/verification/<%= rec.requestId %>" class="hover:underline"><%= rec.requestId %></a>
+                </td>
+                <td class="font-medium text-[#1A2A42]">
+                  <%= rec.owners && rec.owners[0] ? rec.owners[0].name : (rec.ownerName || 'Ramesh Kisan Patil') %>
+                </td>
+                <td class="font-mono text-slate-600">
+                  <%= rec.registrationNumber || rec.khataNumber || ('MH-PUN-' + (rec.surveyNumber || '7812')) %>
+                </td>
+                <td>
+                  <%- include('../partials/status-badge', { status: rec.acquisitionStatus }) %>
+                </td>
+                <td class="text-slate-600 font-medium">
+                  <%= (rec.assignedOfficer && rec.assignedOfficer.name) || rec.assignedOfficerName || 'S. Deshmukh (VO-01)' %>
+                </td>
+                <td class="text-slate-500 font-mono text-[11px]">
+                  <%= rec.updatedAt ? new Date(rec.updatedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '27 Sep 2026' %>
+                </td>
+                <td class="text-right pr-6">
+                  <a href="/verification/<%= rec.requestId %>" class="px-3 py-1 rounded bg-[#207E85] hover:bg-[#19656b] text-white font-medium text-xs transition inline-flex items-center gap-1 shadow-sm">
+                    <span>Open</span>
+                    <span>→</span>
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else if (queue && queue.length > 0) { %>
+            <% queue.forEach(item => { %>
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="font-mono font-bold text-[#207E85]">
+                  <a href="/verification/<%= item.requestId %>" class="hover:underline"><%= item.requestId %></a>
+                </td>
+                <td class="font-medium text-[#1A2A42]">
+                  <%= item.landRecordId?.owners && item.landRecordId.owners[0] ? item.landRecordId.owners[0].name : 'Ramesh Kisan Patil' %>
+                </td>
+                <td class="font-mono text-slate-600">
+                  <%= item.landRecordId?.registrationNumber || item.landRecordId?.surveyNumber || 'MH-PUN-7812' %>
+                </td>
+                <td>
+                  <span class="badge-status badge-in-review">In Review</span>
+                </td>
+                <td class="text-slate-600 font-medium">
+                  <%= currentUser.name || 'S. Deshmukh (VO-01)' %>
+                </td>
+                <td class="text-slate-500 font-mono text-[11px]">
+                  <%= item.updatedAt ? new Date(item.updatedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '27 Sep 2026' %>
+                </td>
+                <td class="text-right pr-6">
+                  <a href="/verification/<%= item.requestId %>" class="px-3 py-1 rounded bg-[#207E85] hover:bg-[#19656b] text-white font-medium text-xs transition inline-flex items-center gap-1 shadow-sm">
+                    <span>Open</span>
+                    <span>→</span>
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <!-- Default mock demonstration rows matching reference PDF -->
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="font-mono font-bold text-[#207E85]"><a href="/verification/queue" class="hover:underline">LRVS-2026-001</a></td>
+              <td class="font-medium text-[#1A2A42]">Ramesh Kisan Patil</td>
+              <td class="font-mono text-slate-600">MH-PUN-2026-7812</td>
+              <td><span class="badge-status badge-pending">Pending Review</span></td>
+              <td class="text-slate-600 font-medium">S. Deshmukh (VO-01)</td>
+              <td class="text-slate-500 font-mono text-[11px]">27 Sep 2026</td>
+              <td class="text-right pr-6">
+                <a href="/verification/queue" class="px-3 py-1 rounded bg-[#207E85] hover:bg-[#19656b] text-white font-medium text-xs transition inline-flex items-center gap-1 shadow-sm">Open →</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="font-mono font-bold text-[#207E85]"><a href="/verification/queue" class="hover:underline">LRVS-2026-002</a></td>
+              <td class="font-medium text-[#1A2A42]">Suresh Bhaurao Shinde</td>
+              <td class="font-mono text-slate-600">MH-NAG-2026-4401</td>
+              <td><span class="badge-status badge-in-review">In Review</span></td>
+              <td class="text-slate-600 font-medium">K. Verma (VO-02)</td>
+              <td class="text-slate-500 font-mono text-[11px]">26 Sep 2026</td>
+              <td class="text-right pr-6">
+                <a href="/verification/queue" class="px-3 py-1 rounded bg-[#207E85] hover:bg-[#19656b] text-white font-medium text-xs transition inline-flex items-center gap-1 shadow-sm">Open →</a>
+              </td>
+            </tr>
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="font-mono font-bold text-[#207E85]"><a href="/verification/queue" class="hover:underline">LRVS-2026-003</a></td>
+              <td class="font-medium text-[#1A2A42]">Anand Govind Rao</td>
+              <td class="font-mono text-slate-600">MH-NAS-2026-1029</td>
+              <td><span class="badge-status badge-verified">Approved</span></td>
+              <td class="text-slate-600 font-medium">M. Joshi (Dist-01)</td>
+              <td class="text-slate-500 font-mono text-[11px]">25 Sep 2026</td>
+              <td class="text-right pr-6">
+                <a href="/verification/queue" class="px-3 py-1 rounded bg-[#207E85] hover:bg-[#19656b] text-white font-medium text-xs transition inline-flex items-center gap-1 shadow-sm">Open →</a>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Chart.js Initialization -->
+<script>
+  let activityChart = null;
+
+  const activityDatasets = {
+    7: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      verifications: [14, 22, 19, 27, 34, 28, 38],
+      approvals: [10, 16, 14, 21, 26, 22, 31]
+    },
+    30: {
+      labels: ['W1', 'W2', 'W3', 'W4'],
+      verifications: [85, 112, 140, 168],
+      approvals: [65, 94, 118, 145]
+    },
+    90: {
+      labels: ['Month 1', 'Month 2', 'Month 3'],
+      verifications: [420, 560, 680],
+      approvals: [340, 480, 590]
+    }
+  };
+
+  function initVerificationActivityChart() {
+    const ctx = document.getElementById('verificationActivityChart');
+    if (!ctx) return;
+
+    activityChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: activityDatasets[7].labels,
+        datasets: [
+          {
+            label: 'Verifications',
+            data: activityDatasets[7].verifications,
+            borderColor: '#207E85',
+            backgroundColor: 'rgba(32, 126, 133, 0.08)',
+            borderWidth: 2.5,
+            tension: 0.35,
+            fill: true,
+            pointBackgroundColor: '#207E85',
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          },
+          {
+            label: 'Approvals',
+            data: activityDatasets[7].approvals,
+            borderColor: '#1A2A42',
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            borderDash: [4, 4],
+            tension: 0.35,
+            pointBackgroundColor: '#1A2A42',
+            pointRadius: 3,
+            pointHoverRadius: 5,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            align: 'end',
+            labels: {
+              boxWidth: 12,
+              font: { size: 11, weight: '600' },
+              color: '#314155',
+            }
+          },
+          tooltip: {
+            backgroundColor: '#1A2A42',
+            titleFont: { size: 12, weight: 'bold' },
+            bodyFont: { size: 11 },
+            padding: 10,
+            cornerRadius: 6,
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#E7EDEF', drawBorder: false },
+            ticks: { color: '#64748B', font: { size: 11 } }
+          },
+          y: {
+            grid: { color: '#E7EDEF', drawBorder: false },
+            ticks: { color: '#64748B', font: { size: 11 }, stepSize: 10 }
+          }
+        }
+      }
+    });
+  }
+
+  function setChartRange(days) {
+    const d = activityDatasets[days];
+    if (!d || !activityChart) return;
+
+    activityChart.data.labels = d.labels;
+    activityChart.data.datasets[0].data = d.verifications;
+    activityChart.data.datasets[1].data = d.approvals;
+    activityChart.update();
+
+    // Toggle button active states
+    [7, 30, 90].forEach(n => {
+      const btn = document.getElementById('btn-range-' + n);
+      if (!btn) return;
+      if (n === days) {
+        btn.className = 'px-3 py-1 rounded-md bg-[#207E85] text-white font-semibold transition';
+      } else {
+        btn.className = 'px-3 py-1 rounded-md text-slate-600 hover:text-[#1A2A42] transition';
+      }
+    });
+  }
+
+  function initRequestDistributionChart() {
+    const ctx = document.getElementById('requestDistributionChart');
+    if (!ctx) return;
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Submitted', 'AI Processed', 'In Verification', 'Approvals', 'Compensation', 'Possession'],
+        datasets: [{
+          label: 'Parcels',
+          data: [
+            <%= (summary && summary.byStatus && summary.byStatus.SUBMITTED) || 12 %>,
+            <%= (summary && summary.byStatus && (summary.byStatus.AI_PROCESSED || summary.byStatus.AI_PROCESSING)) || 8 %>,
+            <%= (summary && summary.byStatus && summary.byStatus.PENDING_VERIFICATION) || (queue && queue.length) || 18 %>,
+            <%= (summary && summary.byStatus && summary.byStatus.PENDING_APPROVAL) || 14 %>,
+            <%= (summary && summary.byStatus && summary.byStatus.COMPENSATION_PENDING) || 9 %>,
+            <%= (summary && summary.byStatus && summary.byStatus.POSSESSION_COMPLETED) || 24 %>
+          ],
+          backgroundColor: [
+            '#94A3B8',
+            '#207E85',
+            '#1A2A42',
+            '#3B82F6',
+            '#10B981',
+            '#059669'
+          ],
+          borderRadius: 6,
+          maxBarThickness: 38,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1A2A42',
+            titleFont: { size: 12, weight: 'bold' },
+            bodyFont: { size: 11 },
+            padding: 10,
+            cornerRadius: 6,
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#64748B', font: { size: 11 } }
+          },
+          y: {
+            grid: { color: '#E7EDEF', drawBorder: false },
+            ticks: { color: '#64748B', font: { size: 11 } }
+          }
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initVerificationActivityChart();
+    initRequestDistributionChart();
+  });
+</script>

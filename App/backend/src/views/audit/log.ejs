@@ -1,0 +1,79 @@
+<!-- Audit Log Trail (LRVS Design) -->
+<div class="space-y-6">
+
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E7EDEF]">
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-bold tracking-tight text-[#1A2A42]">Audit Trail</h1>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#207E85]/10 text-[#207E85] border border-[#207E85]/20">
+          Official Ledger
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">Immutable log of all user operations, verification audits, and state authorizations</p>
+    </div>
+    <!-- Filter -->
+    <form method="GET" action="/audit" class="flex items-center gap-2">
+      <input type="text" name="action" value="<%= (filters && filters.action) || '' %>" placeholder="Filter by action..."
+             class="border border-[#E7EDEF] rounded-lg px-3 py-1.5 text-xs text-slate-700 bg-white shadow-sm focus:outline-none focus:ring-1 focus:ring-[#207E85]">
+      <button type="submit" class="px-3.5 py-1.5 bg-[#207E85] hover:bg-[#19656b] text-white font-semibold text-xs rounded-lg shadow-sm transition">
+        Filter
+      </button>
+    </form>
+  </div>
+
+  <!-- Audit Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-[#E7EDEF] overflow-hidden">
+    <% if (logs && logs.length > 0) { %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs data-table">
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Action</th>
+            <th>Actor / User</th>
+            <th>Role</th>
+            <th>Target Entity</th>
+            <th>Verification Fingerprint</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% logs.forEach((l) => { %>
+          <tr class="hover:bg-slate-50/70 transition">
+            <td class="text-slate-500 font-mono text-[11px]">
+              <%= l.createdAt ? new Date(l.createdAt).toLocaleString('en-IN') : '—' %>
+            </td>
+            <td>
+              <span class="font-mono font-semibold text-[#207E85] bg-[#207E85]/10 px-2 py-0.5 rounded border border-[#207E85]/20">
+                <%= l.action %>
+              </span>
+            </td>
+            <td class="font-medium text-[#1A2A42]">
+              <%= l.userId || l.userEmail || 'System' %>
+            </td>
+            <td class="text-slate-600">
+              <%= (l.role || 'SYSTEM').replace(/_/g, ' ') %>
+            </td>
+            <td class="font-mono text-slate-700">
+              <%= l.entityType %>: <%= l.entityId || '—' %>
+            </td>
+            <td class="font-mono text-slate-400 text-[11px] truncate max-w-xs">
+              <%= l.dataHash ? l.dataHash.substring(0, 16) + '...' : (l.metadata ? JSON.stringify(l.metadata) : 'Recorded') %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <% } else { %>
+    <div class="text-center py-12 px-4">
+      <svg class="mx-auto h-12 w-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <h3 class="mt-3 text-sm font-semibold text-[#1A2A42]">No audit logs found</h3>
+      <p class="mt-1 text-xs text-slate-500">Security audit entries will populate as actions are performed on the platform.</p>
+    </div>
+    <% } %>
+  </div>
+
+</div>

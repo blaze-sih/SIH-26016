@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'LRVS — Land Acquisition & Management System' %></title>
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Leaflet GIS CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <% if (typeof googleMapsApiKey !== 'undefined' && googleMapsApiKey) { %>
+    <!-- Google Maps JavaScript API with libraries=geometry -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&libraries=geometry"></script>
+  <% } %>
+
+  <!-- Enterprise GIS Mapping Engine -->
+  <script src="/js/lrvs-gis.js"></script>
+
+  <!-- Custom Enterprise Design -->
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lrvs: {
+              navy: '#1A2A42',
+              teal: '#207E85',
+              tealHover: '#19656b',
+              ice: '#F3F8F9',
+              white: '#FFFFFF',
+              border: '#E7EDEF',
+              slate: '#314155',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-[#F3F8F9] text-[#314155] antialiased font-sans flex flex-col md:flex-row overflow-x-hidden">
+
+  <% if (typeof currentUser !== 'undefined' && currentUser && !locals.hideSidebar) { %>
+    <!-- Fixed Sidebar: 256px wide, fixed to viewport left -->
+    <%- include('../partials/sidebar') %>
+
+    <!-- Main Workspace: Offset by 256px on desktop -->
+    <div class="ml-0 md:ml-64 w-full md:w-[calc(100vw-16rem)] min-h-screen flex flex-col flex-1 bg-[#F3F8F9] min-w-0">
+      <!-- Navbar: Workspace Header -->
+      <%- include('../partials/navbar') %>
+
+      <!-- Main Content Canvas -->
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 bg-[#F3F8F9]">
+        <div class="max-w-[1600px] mx-auto space-y-6">
+          <%- include('../partials/flash') %>
+          <%- body %>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <%- include('../partials/footer') %>
+    </div>
+  <% } else { %>
+    <!-- Full-width layout when unauthenticated or sidebar hidden (e.g. login) -->
+    <div class="min-h-screen w-full flex flex-col bg-[#F3F8F9]">
+      <%- body %>
+    </div>
+  <% } %>
+
+  <!-- Main client JS -->
+  <script src="/js/main.js"></script>
+</body>
+</html>

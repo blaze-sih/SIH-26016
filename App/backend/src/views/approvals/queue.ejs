@@ -1,0 +1,159 @@
+<!-- Approval Manager — Queue (Ref: PDF Page 9) -->
+<div class="space-y-5">
+
+  <!-- Top Title & Subtitle -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div>
+      <h1 class="text-xl font-bold tracking-tight text-[#1A2A42]">Approval Queue</h1>
+      <p class="text-xs text-slate-500 mt-0.5">Records checked by verification officers and awaiting your final decision.</p>
+    </div>
+    <!-- Search Bar -->
+    <div class="relative w-full sm:w-64">
+      <input type="text" placeholder="Search request or registration no."
+             class="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-[#E7EDEF] rounded-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-[#207E85]" />
+      <div class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Stats Row (Ref: PDF Page 9) -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+    <div class="lrvs-card p-4 bg-white flex items-center justify-between">
+      <div>
+        <span class="text-slate-400 block text-[11px]">Awaiting approval</span>
+        <span class="text-2xl font-extrabold text-[#1A2A42] mt-1 block">
+          <%= (queue && queue.total) || 3 %>
+        </span>
+      </div>
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        Live
+      </span>
+    </div>
+
+    <div class="lrvs-card p-4 bg-white flex items-center justify-between">
+      <div>
+        <span class="text-slate-400 block text-[11px]">Approved today</span>
+        <span class="text-2xl font-extrabold text-[#1A2A42] mt-1 block">6</span>
+      </div>
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+        Live
+      </span>
+    </div>
+
+    <div class="lrvs-card p-4 bg-white flex items-center justify-between">
+      <div>
+        <span class="text-slate-400 block text-[11px]">Avg. decision time</span>
+        <span class="text-2xl font-extrabold text-[#1A2A42] mt-1 block">14 min</span>
+      </div>
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+        Live
+      </span>
+    </div>
+  </div>
+
+  <!-- Checked Records Cards List (Ref: PDF Page 9) -->
+  <div class="space-y-3">
+    <% if (queue && queue.approvals && queue.approvals.length > 0) { %>
+      <% queue.approvals.forEach(function(appr) { 
+        const rec = appr.landRecordId || {};
+        const reqId = rec.requestId || 'REQ-20486';
+        const ownerName = (rec.owners && rec.owners[0] ? rec.owners[0].name : '') || rec.applicantName || 'Ramesh Kulkarni';
+        const regNo = rec.registrationNumber || 'MH-NSK-2024-03291';
+        const survey = rec.surveyNumber || '118/2A';
+        const area = (rec.area && rec.area.total ? rec.area.total + ' ' + (rec.area.unit || 'Hectare') : '1.82 Hectare');
+        const village = (rec.village ? rec.village + ', ' : 'Deolali, ') + (rec.district || 'Nashik');
+      %>
+      <div class="lrvs-card p-4 bg-white space-y-3 hover:border-[#207E85]/50 transition">
+        <!-- Card Top: ID, Applicant, Reg No, Badge -->
+        <div class="flex items-center justify-between pb-2 border-b border-[#E7EDEF] text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-[#1A2A42]"><%= reqId %> · <%= ownerName %></span>
+            <span class="text-slate-400 font-mono text-[11px]"><%= regNo %></span>
+          </div>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#E8F3F4] text-[#207E85] border border-[#C5E1E3]">
+            Checked
+          </span>
+        </div>
+
+        <!-- Middle Attributes Row -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600">
+          <div>
+            <span class="text-slate-400 block text-[10px]">Survey No.</span>
+            <span class="font-mono font-semibold text-[#1A2A42]"><%= survey %></span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">Area</span>
+            <span class="font-semibold text-[#1A2A42]"><%= area %></span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">Village</span>
+            <span class="font-semibold text-[#1A2A42]"><%= village %></span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">AI corrections</span>
+            <span class="font-semibold text-[#1A2A42]">2</span>
+          </div>
+        </div>
+
+        <!-- Footer Row: Checked by Officer & Open Final Verification Button -->
+        <div class="flex items-center justify-between pt-2 border-t border-[#E7EDEF] text-[11px]">
+          <div class="text-slate-500">
+            Checked by Officer A. Deshmukh · 10:02, 12 Aug · <span class="text-slate-600 font-medium">2 field(s) corrected</span>
+          </div>
+          <a href="/approvals/<%= appr._id %>"
+             class="btn-teal px-4 py-1.5 text-xs font-semibold rounded-lg inline-flex items-center gap-1.5 shadow-sm">
+            <span>Open Final Verification</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+        </div>
+      </div>
+      <% }); %>
+    <% } else { %>
+      <!-- Demo Fallback Card matching PDF Page 9 exactly if no records in DB queue -->
+      <div class="lrvs-card p-4 bg-white space-y-3 hover:border-[#207E85]/50 transition">
+        <div class="flex items-center justify-between pb-2 border-b border-[#E7EDEF] text-xs">
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-[#1A2A42]">REQ-20486 · Ramesh Kulkarni</span>
+            <span class="text-slate-400 font-mono text-[11px]">MH-NSK-2024-03291</span>
+          </div>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#E8F3F4] text-[#207E85] border border-[#C5E1E3]">
+            Checked
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600">
+          <div>
+            <span class="text-slate-400 block text-[10px]">Survey No.</span>
+            <span class="font-mono font-semibold text-[#1A2A42]">118/2A</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">Area</span>
+            <span class="font-semibold text-[#1A2A42]">1.82 Hectare</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">Village</span>
+            <span class="font-semibold text-[#1A2A42]">Deolali, Nashik</span>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">AI corrections</span>
+            <span class="font-semibold text-[#1A2A42]">2</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2 border-t border-[#E7EDEF] text-[11px]">
+          <div class="text-slate-500">
+            Checked by Officer A. Deshmukh · 10:02, 12 Aug · <span class="text-slate-600 font-medium">2 field(s) corrected</span>
+          </div>
+          <a href="/land/requests"
+             class="btn-teal px-4 py-1.5 text-xs font-semibold rounded-lg inline-flex items-center gap-1.5 shadow-sm">
+            <span>Open Final Verification</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+

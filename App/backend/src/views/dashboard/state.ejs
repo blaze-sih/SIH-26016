@@ -1,0 +1,545 @@
+<%# ============================================================ %>
+<%# State Government Dashboard — LRVS                           %>
+<%# Team BLAZE | SIH26016                                         %>
+<%# ============================================================ %>
+
+<!-- ─── PAGE TITLE ──────────────────────────────────────────────── -->
+<div class="mb-5">
+  <h1 class="text-2xl font-bold text-[#1A2A42] tracking-tight">Dashboard</h1>
+  <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Overview of land acquisition requests and progress in Maharashtra</p>
+</div>
+
+<!-- ─── SECTION 1: 4 STAT CARDS ─────────────────────────────────── -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+  <!-- 1. Total Requests -->
+  <div class="bg-white rounded-xl border border-[#E7EDEF] p-4 sm:p-5 flex items-start justify-between shadow-sm hover:shadow transition-shadow">
+    <div class="flex items-start gap-3.5">
+      <div class="w-10 h-10 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="text-xs font-semibold text-slate-500">Total Requests</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-[#1A2A42] mt-0.5 leading-none">86</div>
+        <div class="text-xs font-semibold text-emerald-600 mt-2 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+          </svg>
+          +14% <span class="text-slate-400 font-normal">from last month</span>
+        </div>
+      </div>
+    </div>
+    <a href="/land/requests" class="text-slate-300 hover:text-[#207E85] transition-colors p-1">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- 2. Under Review -->
+  <div class="bg-white rounded-xl border border-[#E7EDEF] p-4 sm:p-5 flex items-start justify-between shadow-sm hover:shadow transition-shadow">
+    <div class="flex items-start gap-3.5">
+      <div class="w-10 h-10 rounded-lg bg-[#E0F2FE] text-[#0284C7] flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="text-xs font-semibold text-slate-500">Under Review</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-[#1A2A42] mt-0.5 leading-none">24</div>
+        <div class="text-xs font-semibold text-emerald-600 mt-2 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+          </svg>
+          +8% <span class="text-slate-400 font-normal">from last month</span>
+        </div>
+      </div>
+    </div>
+    <a href="/land/requests" class="text-slate-300 hover:text-[#207E85] transition-colors p-1">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- 3. Approved -->
+  <div class="bg-white rounded-xl border border-[#E7EDEF] p-4 sm:p-5 flex items-start justify-between shadow-sm hover:shadow transition-shadow">
+    <div class="flex items-start gap-3.5">
+      <div class="w-10 h-10 rounded-lg bg-[#DCFCE7] text-[#16A34A] flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="text-xs font-semibold text-slate-500">Approved</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-[#1A2A42] mt-0.5 leading-none">48</div>
+        <div class="text-xs font-semibold text-emerald-600 mt-2 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+          </svg>
+          +22% <span class="text-slate-400 font-normal">from last month</span>
+        </div>
+      </div>
+    </div>
+    <a href="/land/requests" class="text-slate-300 hover:text-[#207E85] transition-colors p-1">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- 4. Rejected -->
+  <div class="bg-white rounded-xl border border-[#E7EDEF] p-4 sm:p-5 flex items-start justify-between shadow-sm hover:shadow transition-shadow">
+    <div class="flex items-start gap-3.5">
+      <div class="w-10 h-10 rounded-lg bg-[#FEE2E2] text-[#DC2626] flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="text-xs font-semibold text-slate-500">Rejected</div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-[#1A2A42] mt-0.5 leading-none">8</div>
+        <div class="text-xs font-semibold text-rose-600 mt-2 flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+          </svg>
+          -11% <span class="text-slate-400 font-normal">from last month</span>
+        </div>
+      </div>
+    </div>
+    <a href="/land/requests" class="text-slate-300 hover:text-[#207E85] transition-colors p-1">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+
+</div>
+
+<!-- ─── SECTION 2: REQUEST TREND + DISTRICT-WISE REQUESTS ──────── -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
+
+  <!-- Left: Request Trend Chart (7 cols) -->
+  <div class="lg:col-span-7 bg-white rounded-xl border border-[#E7EDEF] p-5 shadow-sm flex flex-col justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+      <div>
+        <h2 class="text-sm font-bold text-[#1A2A42]">Request Trend</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Number of land acquisition requests by status</p>
+      </div>
+      <!-- Legend -->
+      <div class="flex flex-wrap items-center gap-3 text-xs font-medium">
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span><span class="text-slate-600">Pending</span></span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6]"></span><span class="text-slate-600">Under Review</span></span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span><span class="text-slate-600">Approved</span></span>
+        <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#EF4444]"></span><span class="text-slate-600">Rejected</span></span>
+      </div>
+    </div>
+    <div class="relative w-full" style="height: 250px;">
+      <canvas id="stateTrendChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Right: District-wise Requests & Maharashtra Map (5 cols) -->
+  <div class="lg:col-span-5 bg-white rounded-xl border border-[#E7EDEF] p-5 shadow-sm flex flex-col">
+    <div class="flex items-start justify-between mb-4">
+      <div>
+        <h2 class="text-sm font-bold text-[#1A2A42]">District-wise Requests</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Total requests by district</p>
+      </div>
+      <button class="inline-flex items-center gap-1 text-xs font-semibold text-slate-700 border border-[#E7EDEF] rounded-lg px-2.5 py-1 bg-white hover:bg-slate-50 transition-colors shadow-sm">
+        Maharashtra
+        <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-12 gap-3 items-center flex-1">
+      <!-- Real Maharashtra GIS Map -->
+      <div class="col-span-7 flex flex-col items-center justify-center relative">
+        <div id="stateMaharashtraMap" class="w-full h-[200px] rounded-lg overflow-hidden border border-[#E7EDEF] shadow-inner relative"></div>
+        <!-- Heat Gradient Legend Bar on Left -->
+        <div class="absolute left-2 bottom-3 z-[400] flex flex-col items-center gap-0.5 bg-white/90 backdrop-blur-xs p-1 rounded border border-[#E7EDEF] shadow-xs">
+          <span class="text-[8px] font-bold text-slate-500">High</span>
+          <div class="w-2 h-10 rounded-full bg-gradient-to-b from-[#0D5C63] via-[#207E85] to-[#BAE6FD]"></div>
+          <span class="text-[8px] font-bold text-slate-400">Low</span>
+        </div>
+      </div>
+
+      <!-- Top 5 Districts List -->
+      <div class="col-span-5 pl-1">
+        <h3 class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Top 5 Districts</h3>
+        <div class="space-y-2">
+          <!-- 1. Nashik -->
+          <div class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-0.5 rounded transition-colors" onclick="window.location.href='/dashboard/district'">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="w-4.5 h-4.5 rounded-full bg-[#FEF3C7] text-[#D97706] text-[10px] font-bold flex items-center justify-center flex-shrink-0">1</span>
+              <span class="text-xs font-semibold text-slate-700 truncate">Nashik</span>
+            </div>
+            <span class="text-xs font-bold text-[#1A2A42] flex-shrink-0">18</span>
+          </div>
+          <!-- 2. Pune -->
+          <div class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-0.5 rounded transition-colors" onclick="window.location.href='/land/requests?district=Pune'">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="w-4.5 h-4.5 rounded-full bg-[#E0F2FE] text-[#0284C7] text-[10px] font-bold flex items-center justify-center flex-shrink-0">2</span>
+              <span class="text-xs font-semibold text-slate-700 truncate">Pune</span>
+            </div>
+            <span class="text-xs font-bold text-[#1A2A42] flex-shrink-0">14</span>
+          </div>
+          <!-- 3. Aurangabad -->
+          <div class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-0.5 rounded transition-colors" onclick="window.location.href='/land/requests?district=Aurangabad'">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="w-4.5 h-4.5 rounded-full bg-[#DCFCE7] text-[#16A34A] text-[10px] font-bold flex items-center justify-center flex-shrink-0">3</span>
+              <span class="text-xs font-semibold text-slate-700 truncate">Aurangabad</span>
+            </div>
+            <span class="text-xs font-bold text-[#1A2A42] flex-shrink-0">12</span>
+          </div>
+          <!-- 4. Nagpur -->
+          <div class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-0.5 rounded transition-colors" onclick="window.location.href='/land/requests?district=Nagpur'">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="w-4.5 h-4.5 rounded-full bg-[#FFEDD5] text-[#EA580C] text-[10px] font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span class="text-xs font-semibold text-slate-700 truncate">Nagpur</span>
+            </div>
+            <span class="text-xs font-bold text-[#1A2A42] flex-shrink-0">10</span>
+          </div>
+          <!-- 5. Thane -->
+          <div class="flex items-center justify-between cursor-pointer hover:bg-slate-50 p-0.5 rounded transition-colors" onclick="window.location.href='/land/requests?district=Thane'">
+            <div class="flex items-center gap-1.5 min-w-0">
+              <span class="w-4.5 h-4.5 rounded-full bg-[#FEF9C3] text-[#CA8A04] text-[10px] font-bold flex items-center justify-center flex-shrink-0">5</span>
+              <span class="text-xs font-semibold text-slate-700 truncate">Thane</span>
+            </div>
+            <span class="text-xs font-bold text-[#1A2A42] flex-shrink-0">8</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── SECTION 3: RECENT ACQUISITION REQUESTS + DONUT CHART ────── -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+
+  <!-- Left: Recent Acquisition Requests Table (7 cols) -->
+  <div class="lg:col-span-7 bg-white rounded-xl border border-[#E7EDEF] shadow-sm flex flex-col justify-between overflow-hidden">
+    <div class="p-5 pb-3 flex items-start justify-between">
+      <div>
+        <h2 class="text-sm font-bold text-[#1A2A42]">Recent Acquisition Requests</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Latest land acquisition requests in Maharashtra</p>
+      </div>
+      <a href="/land/requests" class="text-xs font-semibold text-[#207E85] hover:underline flex items-center gap-1 mt-0.5">
+        View All
+        <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs">
+        <thead>
+          <tr class="bg-[#F8FAFB] text-slate-500 font-semibold border-y border-[#E7EDEF]">
+            <th class="py-2.5 px-4 whitespace-nowrap">Request ID</th>
+            <th class="py-2.5 px-4 whitespace-nowrap">Project Name</th>
+            <th class="py-2.5 px-4 whitespace-nowrap">District</th>
+            <th class="py-2.5 px-4 whitespace-nowrap">Land Area (Ha)</th>
+            <th class="py-2.5 px-4 whitespace-nowrap">Submitted On</th>
+            <th class="py-2.5 px-4 whitespace-nowrap">Status</th>
+            <th class="py-2.5 px-4 text-center whitespace-nowrap">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-[#F1F5F7]">
+          <!-- Row 1 -->
+          <tr class="hover:bg-[#F8FAFB] transition-colors">
+            <td class="py-3 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">MA-2026-0089</td>
+            <td class="py-3 px-4 font-semibold text-[#1A2A42] whitespace-nowrap">Samruddhi Expressway</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">Nashik</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">125.6</td>
+            <td class="py-3 px-4 text-slate-500 whitespace-nowrap">12 Aug 2026</td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              <span class="bg-[#E0F2FE] text-[#0284C7] rounded-full px-2.5 py-0.5 text-[11px] font-semibold">Under Review</span>
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              <a href="/land/requests" class="text-slate-400 hover:text-[#207E85] inline-flex items-center justify-center p-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </a>
+            </td>
+          </tr>
+
+          <!-- Row 2 -->
+          <tr class="hover:bg-[#F8FAFB] transition-colors">
+            <td class="py-3 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">MA-2026-0088</td>
+            <td class="py-3 px-4 font-semibold text-[#1A2A42] whitespace-nowrap">Industrial Park Phase II</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">Pune</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">78.4</td>
+            <td class="py-3 px-4 text-slate-500 whitespace-nowrap">11 Aug 2026</td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              <span class="bg-[#DCFCE7] text-[#16A34A] rounded-full px-2.5 py-0.5 text-[11px] font-semibold">Approved</span>
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              <a href="/land/requests" class="text-slate-400 hover:text-[#207E85] inline-flex items-center justify-center p-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </a>
+            </td>
+          </tr>
+
+          <!-- Row 3 -->
+          <tr class="hover:bg-[#F8FAFB] transition-colors">
+            <td class="py-3 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">MA-2026-0087</td>
+            <td class="py-3 px-4 font-semibold text-[#1A2A42] whitespace-nowrap">Logistics Hub</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">Aurangabad</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">52.3</td>
+            <td class="py-3 px-4 text-slate-500 whitespace-nowrap">11 Aug 2026</td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              <span class="bg-[#FEF3C7] text-[#D97706] rounded-full px-2.5 py-0.5 text-[11px] font-semibold">Pending</span>
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              <a href="/land/requests" class="text-slate-400 hover:text-[#207E85] inline-flex items-center justify-center p-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </a>
+            </td>
+          </tr>
+
+          <!-- Row 4 -->
+          <tr class="hover:bg-[#F8FAFB] transition-colors">
+            <td class="py-3 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">MA-2026-0086</td>
+            <td class="py-3 px-4 font-semibold text-[#1A2A42] whitespace-nowrap">Solar Park Project</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">Nagpur</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">110.0</td>
+            <td class="py-3 px-4 text-slate-500 whitespace-nowrap">10 Aug 2026</td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              <span class="bg-[#DCFCE7] text-[#16A34A] rounded-full px-2.5 py-0.5 text-[11px] font-semibold">Approved</span>
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              <a href="/land/requests" class="text-slate-400 hover:text-[#207E85] inline-flex items-center justify-center p-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </a>
+            </td>
+          </tr>
+
+          <!-- Row 5 -->
+          <tr class="hover:bg-[#F8FAFB] transition-colors">
+            <td class="py-3 px-4 font-mono font-medium text-slate-800 whitespace-nowrap">MA-2026-0085</td>
+            <td class="py-3 px-4 font-semibold text-[#1A2A42] whitespace-nowrap">River Link Project</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">Thane</td>
+            <td class="py-3 px-4 text-slate-600 whitespace-nowrap">65.2</td>
+            <td class="py-3 px-4 text-slate-500 whitespace-nowrap">09 Aug 2026</td>
+            <td class="py-3 px-4 whitespace-nowrap">
+              <span class="bg-[#E0F2FE] text-[#0284C7] rounded-full px-2.5 py-0.5 text-[11px] font-semibold">Under Review</span>
+            </td>
+            <td class="py-3 px-4 text-center whitespace-nowrap">
+              <a href="/land/requests" class="text-slate-400 hover:text-[#207E85] inline-flex items-center justify-center p-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Right: Request Distribution Donut Chart (5 cols) -->
+  <div class="lg:col-span-5 bg-white rounded-xl border border-[#E7EDEF] p-5 shadow-sm flex flex-col justify-between">
+    <div class="mb-2">
+      <h2 class="text-sm font-bold text-[#1A2A42]">Request Distribution (Current)</h2>
+      <p class="text-xs text-slate-500 mt-0.5">Total requests by status</p>
+    </div>
+
+    <div class="grid grid-cols-12 gap-2 items-center my-auto py-2">
+      <!-- Donut canvas with center text -->
+      <div class="col-span-7 flex items-center justify-center relative">
+        <div class="relative w-[180px] h-[180px]">
+          <canvas id="stateDonutChart"></canvas>
+          <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+            <span class="text-2xl font-black text-[#1A2A42] leading-none">86</span>
+            <span class="text-[11px] font-medium text-slate-400 mt-1">Total</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donut Legend on Right -->
+      <div class="col-span-5 space-y-2.5">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#D97706] flex-shrink-0"></span>
+            <span class="text-slate-600 font-medium">Pending</span>
+          </div>
+          <span class="font-bold text-[#1A2A42]">16 <span class="font-normal text-slate-400">(19%)</span></span>
+        </div>
+
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6] flex-shrink-0"></span>
+            <span class="text-slate-600 font-medium">Under Review</span>
+          </div>
+          <span class="font-bold text-[#1A2A42]">24 <span class="font-normal text-slate-400">(28%)</span></span>
+        </div>
+
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#10B981] flex-shrink-0"></span>
+            <span class="text-slate-600 font-medium">Approved</span>
+          </div>
+          <span class="font-bold text-[#1A2A42]">48 <span class="font-normal text-slate-400">(56%)</span></span>
+        </div>
+
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#EF4444] flex-shrink-0"></span>
+            <span class="text-slate-600 font-medium">Rejected</span>
+          </div>
+          <span class="font-bold text-[#1A2A42]">8 <span class="font-normal text-slate-400">(9%)</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── CHARTS INITIALIZATION SCRIPT ────────────────────────────── -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // 1. Request Trend Multi-Line Chart
+  const trendCtx = document.getElementById('stateTrendChart');
+  if (trendCtx) {
+    new Chart(trendCtx.getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['01 Aug', '03 Aug', '05 Aug', '07 Aug', '09 Aug', '11 Aug', '13 Aug'],
+        datasets: [
+          {
+            label: 'Approved',
+            data: [15, 22, 18, 32, 28, 38, 34],
+            borderColor: '#10B981',
+            backgroundColor: 'rgba(16, 185, 129, 0.08)',
+            fill: true,
+            tension: 0.42,
+            borderWidth: 2.2,
+            pointRadius: 0,
+            pointHoverRadius: 5
+          },
+          {
+            label: 'Pending',
+            data: [9, 14, 11, 22, 18, 26, 22],
+            borderColor: '#F59E0B',
+            backgroundColor: 'transparent',
+            tension: 0.42,
+            borderWidth: 2.2,
+            pointRadius: 0,
+            pointHoverRadius: 5
+          },
+          {
+            label: 'Under Review',
+            data: [5, 9, 6, 14, 10, 18, 15],
+            borderColor: '#3B82F6',
+            backgroundColor: 'transparent',
+            tension: 0.42,
+            borderWidth: 2.2,
+            pointRadius: 0,
+            pointHoverRadius: 5
+          },
+          {
+            label: 'Rejected',
+            data: [1, 3, 2, 4, 3, 5, 4],
+            borderColor: '#EF4444',
+            backgroundColor: 'transparent',
+            tension: 0.42,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 5
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            backgroundColor: '#1A2A42',
+            titleFont: { size: 11, weight: 'bold' },
+            bodyFont: { size: 11 },
+            padding: 8,
+            cornerRadius: 6
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#94A3B8', font: { size: 10 } }
+          },
+          y: {
+            min: 0,
+            max: 40,
+            ticks: { stepSize: 10, color: '#94A3B8', font: { size: 10 } },
+            grid: { color: '#F1F5F9' }
+          }
+        }
+      }
+    });
+  }
+
+  // 2. Request Distribution Donut Chart
+  const donutCtx = document.getElementById('stateDonutChart');
+  if (donutCtx) {
+    new Chart(donutCtx.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Pending', 'Under Review', 'Approved', 'Rejected'],
+        datasets: [{
+          data: [16, 24, 48, 8],
+          backgroundColor: ['#D97706', '#3B82F6', '#10B981', '#EF4444'],
+          borderWidth: 3,
+          borderColor: '#FFFFFF',
+          hoverOffset: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '72%',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#1A2A42',
+            padding: 8,
+            cornerRadius: 6,
+            callbacks: {
+              label: function(context) {
+                return ' ' + context.label + ': ' + context.parsed + ' requests';
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // 3. Real Maharashtra GIS Map Initialization
+  if (window.LRVS_GIS) {
+    window.LRVS_GIS.initStateMap('stateMaharashtraMap', '<%= typeof googleMapsApiKey !== "undefined" ? googleMapsApiKey : "" %>');
+  }
+
+});
+</script>

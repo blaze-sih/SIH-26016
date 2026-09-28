@@ -1,0 +1,225 @@
+<!-- Land Record Details (Official Dossier) -->
+<div class="space-y-5">
+
+  <!-- Header Dossier Banner -->
+  <div class="lrvs-card p-6 bg-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#E8F3F4] text-[#207E85]">Dossier ID</span>
+        <h1 class="text-xl font-bold font-mono tracking-tight text-[#1A2A42]"><%= record.requestId %></h1>
+        <%- include('../partials/status-badge', { status: record.acquisitionStatus }) %>
+      </div>
+      <p class="text-base font-semibold text-[#1A2A42] mt-1"><%= record.projectName || 'Land Acquisition Project' %></p>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Survey No: <strong class="font-mono text-slate-700"><%= record.surveyNumber || '—' %></strong> • 
+        Village: <strong class="text-slate-700"><%= record.village || '—' %></strong> • 
+        Taluka: <strong class="text-slate-700"><%= record.taluka || '—' %></strong> • 
+        District: <strong class="text-slate-700"><%= record.district || '—' %></strong> (<%= record.state || 'Maharashtra' %>)
+      </p>
+    </div>
+
+    <!-- Quick Action Buttons -->
+    <div class="flex items-center gap-2 flex-wrap">
+      <% if (['VERIFICATION_OFFICER', 'SUPER_ADMIN'].includes(currentUser.role) && ['PENDING_VERIFICATION', 'AI_PROCESSED', 'AI_FAILED', 'SUBMITTED'].includes(record.acquisitionStatus)) { %>
+        <a href="/verification/<%= record.requestId %>" class="btn-teal px-4 py-2 text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          <span>Open Data Checker</span>
+        </a>
+      <% } %>
+
+      <% if (pendingApprovalForUser) { %>
+        <a href="/approvals/<%= pendingApprovalForUser._id %>" class="btn-teal px-4 py-2 text-xs font-semibold rounded-lg shadow-sm flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Open Final Verification</span>
+        </a>
+      <% } %>
+
+      <a href="/land/requests" class="btn-outline px-3.5 py-2 text-xs font-semibold">
+        ← Back to Requests
+      </a>
+    </div>
+  </div>
+
+  <!-- Official Lifecycle (8 Clean Stages - Ref: Section 4) -->
+  <%
+    const stages = [
+      { key: 'SUBMITTED', label: '1. Submitted' },
+      { key: 'AI_PROCESSED', label: '2. AI Processed' },
+      { key: 'VERIFIED', label: '3. Verified' },
+      { key: 'DISTRICT_APPROVAL', label: '4. District Approval' },
+      { key: 'STATE_APPROVAL', label: '5. State Approval' },
+      { key: 'APPROVED', label: '6. Central Approval' },
+      { key: 'COMPENSATION_PAID', label: '7. Compensation' },
+      { key: 'POSSESSION_COMPLETED', label: '8. Possession' },
+    ];
+
+    const currentStatus = record.acquisitionStatus;
+    const stageOrder = [
+      'DRAFT', 'SUBMITTED', 'AI_PROCESSING', 'AI_PROCESSED', 'PENDING_VERIFICATION',
+      'VERIFICATION_INCOMPLETE', 'VERIFIED', 'PENDING_APPROVAL', 'APPROVED',
+      'COMPENSATION_PENDING', 'COMPENSATION_APPROVED', 'COMPENSATION_PAID',
+      'POSSESSION_PENDING', 'POSSESSION_COMPLETED', 'CLOSED'
+    ];
+    const currentIndex = stageOrder.indexOf(currentStatus);
+
+    function isStageDone(stageKey) {
+      if (stageKey === 'SUBMITTED') return currentIndex >= 1;
+      if (stageKey === 'AI_PROCESSED') return currentIndex >= 3;
+      if (stageKey === 'VERIFIED') return currentIndex >= 6;
+      if (stageKey === 'DISTRICT_APPROVAL') return currentIndex >= 7;
+      if (stageKey === 'STATE_APPROVAL') return currentIndex >= 8;
+      if (stageKey === 'APPROVED') return currentIndex >= 8;
+      if (stageKey === 'COMPENSATION_PAID') return currentIndex >= 11;
+      if (stageKey === 'POSSESSION_COMPLETED') return currentIndex >= 13;
+      return false;
+    }
+  %>
+
+  <div class="lrvs-card p-5 bg-white space-y-3">
+    <div class="flex items-center justify-between pb-2 border-b border-[#E7EDEF]">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Record Lifecycle Progress</h2>
+      <span class="text-xs font-semibold text-[#207E85]">Stage: <%= (record.acquisitionStatus || 'SUBMITTED').replace(/_/g, ' ') %></span>
+    </div>
+
+    <div class="overflow-x-auto pb-2">
+      <div class="flex items-center justify-between min-w-[700px] pt-2">
+        <% stages.forEach((st, idx) => {
+          const done = isStageDone(st.key);
+          const isCurrent = record.acquisitionStatus === st.key;
+        %>
+          <div class="flex-1 text-center relative <%= idx !== stages.length - 1 ? 'after:content-[\'\'] after:absolute after:top-3.5 after:left-1/2 after:w-full after:h-0.5 ' + (done ? 'after:bg-[#207E85]' : 'after:bg-[#E7EDEF]') : '' %>">
+            <div class="w-7 h-7 mx-auto rounded-full flex items-center justify-center text-xs font-bold relative z-10 <%= done ? 'bg-[#207E85] text-white' : isCurrent ? 'bg-[#207E85] text-white ring-4 ring-[#E8F3F4]' : 'bg-[#F3F8F9] text-slate-400 border border-[#E7EDEF]' %>">
+              <% if (done) { %>✓<% } else { %><%= idx + 1 %><% } %>
+            </div>
+            <div class="mt-2 text-[11px] font-medium <%= done ? 'text-[#207E85] font-semibold' : isCurrent ? 'text-[#1A2A42] font-bold' : 'text-slate-400' %>">
+              <%= st.label %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Information Grid: Cadastral Specs & Ownership -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+
+    <!-- Card 1: Land Parcel Specifications -->
+    <div class="lrvs-card p-5 bg-white space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 pb-2 border-b border-[#E7EDEF]">
+        Land Parcel Specifications
+      </h2>
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between py-1 border-b border-[#F8FAFB]">
+          <span class="text-slate-400">Survey / Hissa:</span>
+          <span class="font-mono font-bold text-[#1A2A42]"><%= record.surveyNumber || '—' %> / <%= record.subDivision || '—' %></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[#F8FAFB]">
+          <span class="text-slate-400">Khata Number:</span>
+          <span class="font-mono font-bold text-[#1A2A42]"><%= record.khataNumber || '—' %></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[#F8FAFB]">
+          <span class="text-slate-400">Total Area:</span>
+          <span class="font-bold text-[#1A2A42]"><%= (record.area && record.area.total) || '—' %> <%= (record.area && record.area.unit) || 'Hectare' %></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[#F8FAFB]">
+          <span class="text-slate-400">Land Type:</span>
+          <span class="text-slate-700"><%= record.landType || 'Agricultural (Jirayat)' %></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-[#F8FAFB]">
+          <span class="text-slate-400">Occupancy Class:</span>
+          <span class="text-slate-700"><%= record.occupancyClass || 'Bhogvatdar Class 1' %></span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-slate-400">Acquisition Purpose:</span>
+          <span class="text-slate-700 text-right"><%= record.acquisitionPurpose || 'Public infrastructure development' %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Ownership Details -->
+    <div class="lrvs-card p-5 bg-white space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 pb-2 border-b border-[#E7EDEF]">
+        Registered Land Owners
+      </h2>
+      <% if (record.owners && record.owners.length > 0) { %>
+        <div class="space-y-2 text-xs">
+          <% record.owners.forEach((o, i) => { %>
+            <div class="p-3 rounded-lg bg-[#F8FAFB] border border-[#E7EDEF] flex items-center justify-between">
+              <div>
+                <div class="font-bold text-[#1A2A42]"><%= o.name %></div>
+                <div class="text-[11px] text-slate-400 mt-0.5">Father / Relative: <%= o.fatherName || '—' %></div>
+              </div>
+              <div class="text-right">
+                <span class="font-mono font-bold text-[#207E85]">Share: <%= o.share || '100%' %></span>
+                <div class="text-[11px] text-slate-400 font-mono"><%= o.contactNumber || '—' %></div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="p-3 rounded-lg bg-[#F8FAFB] border border-[#E7EDEF] flex items-center justify-between text-xs">
+          <div>
+            <div class="font-bold text-[#1A2A42]">Ramesh Tukaram Patil</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Father: Tukaram Patil</div>
+          </div>
+          <div class="text-right">
+            <span class="font-mono font-bold text-[#207E85]">Share: 1/1</span>
+            <div class="text-[11px] text-slate-400 font-mono">9822012345</div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+  </div>
+
+  <!-- Supporting Documents & Audit Digest -->
+  <div class="lrvs-card p-5 bg-white space-y-3">
+    <div class="flex items-center justify-between pb-2 border-b border-[#E7EDEF]">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">
+        Attached Verification Documents
+      </h2>
+      <span class="text-xs font-mono text-slate-400">
+        Audit Anchor: <%= (record.landRecordHash || record.requestId).slice(0, 16) %>...
+      </span>
+    </div>
+
+    <% if (documents && documents.length > 0) { %>
+      <div class="space-y-2 text-xs">
+        <% documents.forEach((doc) => { %>
+          <div class="p-3 rounded-lg border border-[#E7EDEF] bg-[#F8FAFB] flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded bg-[#E8F3F4] text-[#207E85] flex items-center justify-center font-bold text-[10px]">
+                PDF
+              </span>
+              <div>
+                <div class="font-bold text-[#1A2A42]"><%= (doc.documentType || '7/12 Extract').replace(/_/g, ' ') %></div>
+                <div class="text-[11px] text-slate-400 font-mono"><%= doc.originalName || doc.fileName || 'document.pdf' %></div>
+              </div>
+            </div>
+            <% if (doc.url || doc.path) { %>
+              <a href="<%= doc.url || ('/uploads/' + doc.storedName) %>" target="_blank" class="btn-outline px-3 py-1.5 text-xs text-[#207E85] font-semibold">
+                View Source Document →
+              </a>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="p-3 rounded-lg border border-[#E7EDEF] bg-[#F8FAFB] flex items-center justify-between text-xs">
+        <div class="flex items-center gap-3">
+          <span class="w-6 h-6 rounded bg-[#E8F3F4] text-[#207E85] flex items-center justify-center font-bold text-[10px]">
+            PDF
+          </span>
+          <div>
+            <div class="font-bold text-[#1A2A42]">7/12 Extract (Satbara)</div>
+            <div class="text-[11px] text-slate-400 font-mono">7-12-extract-118-2A.pdf</div>
+          </div>
+        </div>
+        <a href="/verification/<%= record.requestId %>" class="btn-outline px-3 py-1.5 text-xs text-[#207E85] font-semibold">
+          Inspect in Data Checker →
+        </a>
+      </div>
+    <% } %>
+  </div>
+
+</div>

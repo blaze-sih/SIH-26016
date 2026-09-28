@@ -1,0 +1,110 @@
+<!-- Project Officer / Data Entry Dashboard -->
+<div class="space-y-6">
+
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Project Officer Acquisition Portal</h1>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Project Officer / Data Entry</span>
+      </div>
+      <p class="text-sm text-slate-500 mt-1">Initiate land acquisition projects, register land parcels, upload revenue documents, and track AI processing</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/land/create" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>+ New Land Acquisition Entry</span>
+      </a>
+      <a href="/map" class="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg shadow-sm transition">
+        GIS Land Map
+      </a>
+    </div>
+  </div>
+
+  <!-- KPI Metrics Grid -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">My Registered Parcels</div>
+      <div class="mt-2 text-3xl font-extrabold text-slate-900"><%= totalCreated || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">Total submitted requests</div>
+    </div>
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div class="text-xs font-semibold text-[#207E85] uppercase tracking-wider">AI Processing & Verified</div>
+      <div class="mt-2 text-3xl font-extrabold text-[#207E85]"><%= underVerification || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">In OCR / Verification pipeline</div>
+    </div>
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div class="text-xs font-semibold text-blue-600 uppercase tracking-wider">In Approval Stages</div>
+      <div class="mt-2 text-3xl font-extrabold text-blue-600"><%= inApproval || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">District / State / Central reviews</div>
+    </div>
+    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+      <div class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Approved & Possessed</div>
+      <div class="mt-2 text-3xl font-extrabold text-emerald-600"><%= completedCount || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">Ready for infrastructure development</div>
+    </div>
+  </div>
+
+  <!-- Quick Action Banner -->
+  <div class="p-6 bg-gradient-to-r from-blue-900 to-indigo-900 rounded-xl text-white shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="space-y-1 text-center md:text-left">
+      <h3 class="text-lg font-bold">Ready to record a new land acquisition parcel?</h3>
+      <p class="text-xs text-blue-200 max-w-xl">
+        Enter project details, survey/khata numbers, ownership information, and upload 7/12 Extracts or Form 8A. The system will automatically trigger OCR and entity extraction.
+      </p>
+    </div>
+    <a href="/land/create" class="px-5 py-2.5 bg-white text-blue-900 hover:bg-blue-50 font-bold text-xs rounded-lg shadow transition flex-shrink-0">
+      Start Acquisition Form →
+    </a>
+  </div>
+
+  <!-- Recent Land Records Created by Project Officer -->
+  <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-base font-bold text-slate-900">Recent Acquisition Records</h2>
+      <a href="/land/requests" class="text-xs font-semibold text-blue-600 hover:text-blue-500">View All →</a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs data-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Project Name</th>
+            <th>Survey / Village</th>
+            <th>District / State</th>
+            <th>Area</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (recentRecords && recentRecords.length > 0) { %>
+            <% recentRecords.forEach(rec => { %>
+              <tr>
+                <td class="font-mono font-semibold text-blue-600">
+                  <a href="/land/<%= rec.requestId %>" class="hover:underline"><%= rec.requestId %></a>
+                </td>
+                <td class="font-medium text-slate-800"><%= rec.projectName || '—' %></td>
+                <td class="font-mono"><%= rec.surveyNumber || '—' %> (<%= rec.village || '—' %>)</td>
+                <td><%= rec.district || '—' %>, <%= rec.state || '—' %></td>
+                <td><%= rec.area?.total || '—' %> <%= rec.area?.unit || '' %></td>
+                <td><%- include('../partials/status-badge', { status: rec.acquisitionStatus }) %></td>
+                <td>
+                  <a href="/land/<%= rec.requestId %>" class="text-blue-600 hover:text-blue-800 font-semibold">
+                    Manage →
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="7" class="text-center py-6 text-slate-400">No acquisition records created yet. Click "+ New Land Acquisition Entry" above.</td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

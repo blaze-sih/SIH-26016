@@ -1,0 +1,116 @@
+<!-- Land Acquisition Requests List (Citizen Portal View) -->
+<div class="space-y-6">
+
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E7EDEF]">
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-bold tracking-tight text-[#1A2A42]">Land Acquisition Requests</h1>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#207E85]/10 text-[#207E85] border border-[#207E85]/20">
+          Citizen Portal Directory
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">Directory of all land parcels and their lifecycle states across project jurisdictions</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <% if (['PROJECT_OFFICER', 'SUPER_ADMIN'].includes(currentUser.role)) { %>
+        <a href="/land/create" class="px-4 py-2 bg-[#207E85] hover:bg-[#19656b] text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          <span>New Acquisition Entry</span>
+        </a>
+      <% } %>
+      <a href="/map" class="px-3.5 py-2 bg-white hover:bg-slate-50 border border-[#E7EDEF] text-slate-700 text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+        <span>GIS Map</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter & Search Toolbar -->
+  <form action="/land/requests" method="GET" class="bg-white p-4 rounded-xl border border-[#E7EDEF] shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+    <div>
+      <label class="block font-semibold text-slate-600 mb-1">Search Keyword</label>
+      <input type="text" name="search" value="<%= query.search || '' %>" placeholder="Request ID, Survey, Project..." class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+    </div>
+    <div>
+      <label class="block font-semibold text-slate-600 mb-1">Lifecycle Status</label>
+      <select name="status" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+        <option value="">All Statuses</option>
+        <option value="DRAFT" <%= query.status === 'DRAFT' ? 'selected' : '' %>>Draft</option>
+        <option value="SUBMITTED" <%= query.status === 'SUBMITTED' ? 'selected' : '' %>>Submitted</option>
+        <option value="AI_PROCESSED" <%= query.status === 'AI_PROCESSED' ? 'selected' : '' %>>AI Processed</option>
+        <option value="PENDING_VERIFICATION" <%= query.status === 'PENDING_VERIFICATION' ? 'selected' : '' %>>Pending Verification</option>
+        <option value="VERIFIED" <%= query.status === 'VERIFIED' ? 'selected' : '' %>>Verified</option>
+        <option value="PENDING_APPROVAL" <%= query.status === 'PENDING_APPROVAL' ? 'selected' : '' %>>Pending Approval</option>
+        <option value="APPROVED" <%= query.status === 'APPROVED' ? 'selected' : '' %>>Approved</option>
+        <option value="REJECTED" <%= query.status === 'REJECTED' ? 'selected' : '' %>>Rejected</option>
+        <option value="COMPENSATION_PENDING" <%= query.status === 'COMPENSATION_PENDING' ? 'selected' : '' %>>Compensation Pending</option>
+        <option value="COMPENSATION_PAID" <%= query.status === 'COMPENSATION_PAID' ? 'selected' : '' %>>Compensation Paid</option>
+        <option value="POSSESSION_COMPLETED" <%= query.status === 'POSSESSION_COMPLETED' ? 'selected' : '' %>>Possession Completed</option>
+        <option value="CLOSED" <%= query.status === 'CLOSED' ? 'selected' : '' %>>Closed</option>
+      </select>
+    </div>
+    <div>
+      <label class="block font-semibold text-slate-600 mb-1">District</label>
+      <input type="text" name="district" value="<%= query.district || '' %>" placeholder="e.g. Pune, Nagpur..." class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+    </div>
+    <div class="flex items-end gap-2">
+      <button type="submit" class="flex-1 py-2 bg-[#207E85] hover:bg-[#19656b] text-white font-semibold rounded-lg text-xs transition">
+        Filter
+      </button>
+      <a href="/land/requests" class="px-3 py-2 bg-[#F3F8F9] hover:bg-slate-200 text-slate-600 font-semibold rounded-lg text-xs transition border border-[#E7EDEF]">
+        Reset
+      </a>
+    </div>
+  </form>
+
+  <!-- Records Table -->
+  <div class="bg-white rounded-xl border border-[#E7EDEF] shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs data-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Project Name</th>
+            <th>Survey / Village</th>
+            <th>District / State</th>
+            <th>Land Area</th>
+            <th>Primary Owner</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (records && records.length > 0) { %>
+            <% records.forEach(rec => { %>
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="font-mono font-bold text-[#207E85]">
+                  <a href="/land/<%= rec.requestId %>" class="hover:underline"><%= rec.requestId %></a>
+                </td>
+                <td class="font-medium text-[#1A2A42]"><%= rec.projectName || '—' %></td>
+                <td class="font-mono"><%= rec.surveyNumber || '—' %> (<%= rec.village || '—' %>)</td>
+                <td><%= rec.district || '—' %>, <%= rec.state || '—' %></td>
+                <td><%= rec.area?.total || '—' %> <%= rec.area?.unit || '' %></td>
+                <td class="font-medium text-[#1A2A42]"><%= rec.owners && rec.owners[0] ? rec.owners[0].name : '—' %></td>
+                <td><%- include('../partials/status-badge', { status: rec.acquisitionStatus }) %></td>
+                <td>
+                  <a href="/land/<%= rec.requestId %>" class="px-2.5 py-1 rounded bg-[#207E85]/10 hover:bg-[#207E85]/20 text-[#207E85] font-semibold text-[11px] transition inline-flex items-center gap-1 border border-[#207E85]/20">
+                    View Record →
+                  </a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="8" class="text-center py-10 text-slate-400">
+                <svg class="w-10 h-10 text-slate-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>No land acquisition records matched your query.</span>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

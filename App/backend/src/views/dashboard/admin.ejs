@@ -1,0 +1,186 @@
+<!-- Super Admin Dashboard (LRVS Design) -->
+<div class="space-y-6">
+
+  <!-- Page Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E7EDEF]">
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-bold tracking-tight text-[#1A2A42]">System Administration & RBAC Portal</h1>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#207E85]/10 text-[#207E85] border border-[#207E85]/20">
+          Super Administrator
+        </span>
+      </div>
+      <p class="text-xs text-slate-500 mt-1">Platform management, official government account provisioning, and system audit supervision</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/audit" class="px-4 py-2 bg-white hover:bg-slate-50 border border-[#E7EDEF] text-slate-700 text-xs font-semibold rounded-lg shadow-sm transition">
+        Audit Logs
+      </a>
+      <a href="/system/status" class="px-4 py-2 bg-[#207E85] hover:bg-[#19656b] text-white text-xs font-semibold rounded-lg shadow-sm transition">
+        System Health
+      </a>
+    </div>
+  </div>
+
+  <!-- KPI Metrics Grid -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm">
+      <div class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Users</div>
+      <div class="mt-2 text-3xl font-extrabold text-[#1A2A42]"><%= (users && users.length) || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">Authorized personnel</div>
+    </div>
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm">
+      <div class="text-xs font-semibold text-[#207E85] uppercase tracking-wider">Total Land Parcels</div>
+      <div class="mt-2 text-3xl font-extrabold text-[#207E85]"><%= summary.totalRecords || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">Across all projects</div>
+    </div>
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm">
+      <div class="text-xs font-semibold text-amber-600 uppercase tracking-wider">Pending Approvals</div>
+      <div class="mt-2 text-3xl font-extrabold text-amber-600"><%= summary.byStatus?.PENDING_APPROVAL || 0 %></div>
+      <div class="mt-1 text-xs text-slate-400">Multi-tier pipeline</div>
+    </div>
+    <div class="bg-white p-5 rounded-xl border border-[#E7EDEF] shadow-sm">
+      <div class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Completed / Closed</div>
+      <div class="mt-2 text-3xl font-extrabold text-emerald-600"><%= (summary.byStatus?.POSSESSION_COMPLETED || 0) + (summary.byStatus?.CLOSED || 0) %></div>
+      <div class="mt-1 text-xs text-slate-400">Fully closed records</div>
+    </div>
+  </div>
+
+  <!-- Official User Provisioning (Admin Controlled — No Public Registration) -->
+  <div class="bg-white p-6 rounded-xl border border-[#E7EDEF] shadow-sm space-y-4">
+    <div class="flex items-center justify-between pb-3 border-b border-[#E7EDEF]">
+      <div>
+        <h2 class="text-base font-bold text-[#1A2A42]">Provision Official Government Account</h2>
+        <p class="text-xs text-slate-500">Only Super Admins can assign authorized roles. Public role self-registration is disabled.</p>
+      </div>
+    </div>
+
+    <form id="create-user-form" onsubmit="handleCreateUser(event)" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">User ID * (Login ID)</label>
+        <input type="text" name="userId" required placeholder="e.g. DIST-002" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg uppercase font-mono text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Full Name *</label>
+        <input type="text" name="name" required placeholder="Officer Name" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Assigned Role *</label>
+        <select name="role" required class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs bg-white focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+          <option value="DISTRICT_AUTHORITY">DISTRICT_AUTHORITY</option>
+          <option value="STATE_AUTHORITY">STATE_AUTHORITY</option>
+          <option value="CENTRAL_AUTHORITY">CENTRAL_AUTHORITY</option>
+          <option value="VERIFICATION_OFFICER">VERIFICATION_OFFICER</option>
+          <option value="PROJECT_OFFICER">PROJECT_OFFICER</option>
+          <option value="FINANCE_OFFICER">FINANCE_OFFICER</option>
+          <option value="LAND_OWNER">LAND_OWNER</option>
+          <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+          <option value="VIEWER">VIEWER</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Initial Password *</label>
+        <input type="password" name="password" required minlength="6" placeholder="Min 6 characters" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">State</label>
+        <input type="text" name="state" placeholder="e.g. Maharashtra" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">District</label>
+        <input type="text" name="district" placeholder="e.g. Pune" class="w-full px-3 py-2 border border-[#E7EDEF] rounded-lg text-xs focus:ring-1 focus:ring-[#207E85] focus:outline-none">
+      </div>
+
+      <div class="sm:col-span-2 md:col-span-3 flex justify-end pt-2">
+        <button type="submit" class="px-5 py-2 bg-[#207E85] hover:bg-[#19656b] text-white font-semibold text-xs rounded-lg shadow-sm transition">
+          Provision User Account
+        </button>
+      </div>
+    </form>
+    <div id="user-create-result" class="hidden text-xs font-semibold p-3 rounded-lg"></div>
+  </div>
+
+  <!-- User Accounts Table -->
+  <div class="bg-white p-6 rounded-xl border border-[#E7EDEF] shadow-sm space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-base font-bold text-[#1A2A42]">Registered System Accounts (<%= (users && users.length) || 0 %>)</h2>
+      <span class="text-xs text-slate-400">Active Directory</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs data-table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Jurisdiction</th>
+            <th>Status</th>
+            <th>Last Login</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (users && users.length > 0) { %>
+            <% users.forEach(u => { %>
+              <tr class="hover:bg-slate-50/70 transition">
+                <td class="font-mono font-bold text-[#207E85]"><%= u.userId %></td>
+                <td class="font-medium text-[#1A2A42]"><%= u.name %></td>
+                <td>
+                  <span class="px-2 py-0.5 rounded font-mono text-[11px] font-semibold bg-slate-100 text-slate-800">
+                    <%= u.role %>
+                  </span>
+                </td>
+                <td>
+                  <%= u.district ? u.district + ', ' : '' %><%= u.state || 'National' %>
+                </td>
+                <td>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold <%= u.isActive ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' %>">
+                    <%= u.isActive ? 'ACTIVE' : 'INACTIVE' %>
+                  </span>
+                </td>
+                <td class="text-slate-400 font-mono text-[11px]">
+                  <%= u.lastLogin ? new Date(u.lastLogin).toLocaleDateString('en-IN') : 'Never' %>
+                </td>
+              </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function handleCreateUser(e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData.entries());
+
+  const resultEl = document.getElementById('user-create-result');
+  resultEl.className = 'text-xs font-semibold p-3 rounded-lg bg-[#207E85]/10 text-[#207E85] block border border-[#207E85]/20';
+  resultEl.innerText = 'Creating user account...';
+
+  try {
+    const res = await fetch('/api/auth/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const resData = await res.json();
+    if (res.ok) {
+      resultEl.className = 'text-xs font-semibold p-3 rounded-lg bg-emerald-50 text-emerald-800 block border border-emerald-200';
+      resultEl.innerText = '✓ User ' + resData.data.user.userId + ' created successfully. Reloading...';
+      form.reset();
+      setTimeout(() => location.reload(), 1500);
+    } else {
+      resultEl.className = 'text-xs font-semibold p-3 rounded-lg bg-rose-50 text-rose-800 block border border-rose-200';
+      resultEl.innerText = '✗ Error: ' + (resData.message || 'Failed to create user');
+    }
+  } catch (err) {
+    resultEl.className = 'text-xs font-semibold p-3 rounded-lg bg-rose-50 text-rose-800 block border border-rose-200';
+    resultEl.innerText = '✗ Network error: ' + err.message;
+  }
+}
+</script>

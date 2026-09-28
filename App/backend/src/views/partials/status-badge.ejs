@@ -1,0 +1,30 @@
+<%
+  const s = (typeof status === 'string' ? status : '').toUpperCase();
+  let badgeClass = 'badge-draft';
+  let label = s.replace(/_/g, ' ');
+
+  switch (s) {
+    case 'DRAFT': badgeClass = 'badge-draft'; break;
+    case 'SUBMITTED': badgeClass = 'badge-submitted'; break;
+    case 'AI_PROCESSING': badgeClass = 'badge-ai_processing'; break;
+    case 'AI_PROCESSED': badgeClass = 'badge-ai_processed'; break;
+    case 'AI_FAILED': badgeClass = 'badge-ai_failed'; break;
+    case 'PENDING_VERIFICATION': badgeClass = 'badge-pending_verification'; break;
+    case 'VERIFICATION_INCOMPLETE': badgeClass = 'badge-verification_incomplete'; break;
+    case 'VERIFIED': badgeClass = 'badge-verified'; break;
+    case 'PENDING_APPROVAL': badgeClass = 'badge-pending_approval'; break;
+    case 'APPROVED': badgeClass = 'badge-approved'; break;
+    case 'REJECTED': badgeClass = 'badge-rejected'; break;
+    case 'COMPENSATION_PENDING': badgeClass = 'badge-compensation_pending'; break;
+    case 'COMPENSATION_APPROVED': badgeClass = 'badge-compensation_approved'; break;
+    case 'COMPENSATION_PAID': badgeClass = 'badge-compensation_paid'; break;
+    case 'POSSESSION_PENDING': badgeClass = 'badge-possession_pending'; break;
+    case 'POSSESSION_COMPLETED': badgeClass = 'badge-possession_completed'; break;
+    case 'CLOSED': badgeClass = 'badge-closed'; break;
+    default: badgeClass = 'badge-draft';
+  }
+%>
+<span class="badge-status <%= badgeClass %>">
+  <span class="w-1.5 h-1.5 rounded-full bg-current opacity-75"></span>
+  <%= label %>
+</span>

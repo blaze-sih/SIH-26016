@@ -1,0 +1,19 @@
+<% if (typeof successMessage !== 'undefined' && successMessage) { %>
+  <div class="mb-4 p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-center justify-between alert-autodismiss">
+    <div class="flex items-center gap-2">
+      <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      <span class="text-sm font-medium"><%= successMessage %></span>
+    </div>
+    <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-800 text-sm">✕</button>
+  </div>
+<% } %>
+
+<% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+  <div class="mb-4 p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-center justify-between alert-autodismiss">
+    <div class="flex items-center gap-2">
+      <svg class="w-5 h-5 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <span class="text-sm font-medium"><%= errorMessage %></span>
+    </div>
+    <button onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-800 text-sm">✕</button>
+  </div>
+<% } %>
